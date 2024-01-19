@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat&family=Inter&display=swap');
+
+a{
+    text-decoration: none;
+    color: black;
+}
+html,body{
+    height: 100%;
+    font-size: 24px;
+    font-family: 'Inter', sans-serif;
+}

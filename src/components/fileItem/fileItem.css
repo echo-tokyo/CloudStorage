@@ -1,0 +1,21 @@
+.file-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 55px;
+    margin-right: 55px;
+    width: 100;
+    height: 50px;
+    border: 1px solid;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+.file-item_item{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+.file-item_item2{
+    display: flex;
+    gap: 10px;
+}

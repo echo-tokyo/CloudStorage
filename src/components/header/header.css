@@ -1,0 +1,22 @@
+#file-upload{
+    display: none;
+}
+header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 90px;
+    padding-right: 90px;
+    padding-top: 24px;
+}
+.header_item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+.header_item2{
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+}
