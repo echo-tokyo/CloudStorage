@@ -1,11 +1,13 @@
-import Header from "../header/Header"
-import FieldItems from "../fieldItems/fieldItems"
+// import Header from "../header/Header"
+// import FieldItems from "../fieldItems/fieldItems"
+import Login from '../login/Login'
 
 function Home(){
     return(
         <>
-        <Header />
-        <FieldItems />
+        <Login />
+        {/* <Header />
+        <FieldItems /> */}
         </>
     )
 }

@@ -9,3 +9,28 @@ html,body{
     font-size: 24px;
     font-family: 'Inter', sans-serif;
 }
+h1{
+    font-family: 'Caveat', sans-serif;
+    font-size: 96px;
+}
+input[type="email"],[type="password"]{
+    width: 407px;
+    height: 70px;
+    background-color: #B4B4B4;
+    border-radius: 15px;
+    border: none;
+    font-size: 24px;
+    text-indent: 30px;
+}
+input::placeholder{
+    color: black;
+}
+
+input[type="submit"]{
+    width: 407px;
+    height: 70px;
+    background-color: #B4B4B4;
+    border-radius: 15px;
+    border: none;
+    font-size: 24px;
+}
