@@ -18,5 +18,7 @@ header{
 .header_item2{
     display: flex;
     gap: 10px;
+}
+.download{
     cursor: pointer;
 }

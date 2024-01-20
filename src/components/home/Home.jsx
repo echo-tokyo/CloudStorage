@@ -1,14 +1,8 @@
-// import Header from "../header/Header"
-// import FieldItems from "../fieldItems/fieldItems"
-import Login from '../login/Login'
+import MainPage from '../mainPage/MainPage'
 
 function Home(){
     return(
-        <>
-        <Login />
-        {/* <Header />
-        <FieldItems /> */}
-        </>
+        <MainPage />
     )
 }
 
