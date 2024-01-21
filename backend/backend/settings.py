@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     # my apps
     'users',
     'user_profile',
+    'storage_api',
+    'reviews',
     # default apps
     'django.contrib.admin',
     'django.contrib.auth',
