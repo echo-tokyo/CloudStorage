@@ -57,6 +57,7 @@ CREATE INDEX folder_user_index ON folder(user_id);
 CREATE TABLE IF NOT EXISTS file (
 	id INT NOT NULL AUTO_INCREMENT,
 	name VARCHAR(50) NOT NULL,
+	size VARCHAR(20) NOT NULL,
 	path VARCHAR(255) NOT NULL,
 	folder_id INT NOT NULL,
 	recycle_bin BOOLEAN NOT NULL DEFAULT 0,
@@ -67,6 +68,16 @@ CREATE TABLE IF NOT EXISTS file (
 );
 CREATE INDEX file_user_index ON file(folder_id);
 
+
+-- Create the Review table
+CREATE TABLE IF NOT EXISTS review (
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NULL,
+	review_text TEXT NOT NULL,
+	CONSTRAINT review_id_pk PRIMARY KEY (id),
+    CONSTRAINT review_user_fk FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE SET NULL
+);
+CREATE INDEX review_user_index ON review(user_id);
 
 -- TRIGGERS
 
