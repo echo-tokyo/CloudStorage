@@ -1,17 +1,17 @@
 const filesData = [
     {
         id: 1,
-        name: 'porn.zip',
+        name: 'test.zip',
         size: '2 гб'
     },
     {
         id: 2,
-        name: 'Сбербанк мод все деньги.exe',
+        name: 'test.exe',
         size: '300 мб'
     },
     {
         id: 3,
-        name: 'мама анапа.zip',
+        name: 'text.bat',
         size: '999 тб'
     },
 ]
