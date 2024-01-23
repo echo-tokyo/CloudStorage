@@ -1,6 +1,17 @@
 import './helloPage.css'
+import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react';
 
 function HelloPage() {
+    const history = useNavigate();
+
+    useEffect(() => {
+    const redirectTimer = setTimeout(() => {
+      history('/login');
+    }, 3000);
+
+    return () => clearTimeout(redirectTimer);
+  }, [history]);
     return(
         <div className="wrapper">
             <h1>Привет !</h1>

@@ -1,8 +1,15 @@
+import HelloPage from '../helloPage/HelloPage'
 import MainPage from '../mainPage/MainPage'
 
 function Home(){
     return(
-        <MainPage />
+        <>
+        {localStorage.getItem('registered') ? (
+            <MainPage />
+        ) : (
+            <HelloPage />
+        )}
+        </>
     )
 }
 

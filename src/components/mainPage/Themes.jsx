@@ -1,21 +1,12 @@
-import './mainPage.css'
-import Header from './header/Header'
-import FileItem from './fileItem/FileItem'
-import filesData from './file.data'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { createGlobalStyle } from 'styled-components';
+import {setIsClicked} from './'
 
-function FieldItems(){
-    const [files, setFile] = useState(filesData)
-    
-    const [isClicked, setIsClicked] = useState(() => {
+function Themes () {
+    export const [isClicked, setIsClicked] = useState(() => {
         const savedTheme = localStorage.getItem('isBlackTheme');
         return savedTheme ? savedTheme === 'true' : false; // используем сохраненное значение, если оно существует
     })
-    const changeTheme = () => {
-        setIsClicked(!isClicked)
-    }
-    
     const GlobalStyles = createGlobalStyle`
     body{ 
         background-color: ${props => (props.isClicked ? '#2B2B2B' : 'white')};
@@ -35,24 +26,9 @@ function FieldItems(){
     .file-item{
         border-color: ${props => (props.isClicked ? 'white' : 'black')};
     }`
-
-    useEffect(() => {
-        localStorage.setItem('isBlackTheme', isClicked)
-    }, [isClicked])
-
     return(
-        <>
         <GlobalStyles isClicked={isClicked}/>
-        <Header changeTheme={changeTheme}/>
-        <main>
-            {files.length ? (
-                files.map(file => <FileItem key={file.id} file={file} setFile={setFile} isClicked={isClicked}/>)
-            ) : (
-                <p>There are no files</p>
-            )}
-        </main>
-        </>
     )
 }
 
-export default FieldItems 
+export default Themes
