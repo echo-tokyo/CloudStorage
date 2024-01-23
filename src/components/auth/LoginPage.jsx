@@ -12,9 +12,9 @@ function Login () {
         <div className="wrapper">
             <h1>Cloud Storage</h1>
             <Themes defaultTheme={false}>
-                {() => {
+                {() => (
                     <Link className='link' to={'/reg'}>Регистрация</Link>
-                }}
+                )}
             </Themes>
             <form action="" className="form-field">
                 <div className="inps">

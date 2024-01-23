@@ -1,5 +1,6 @@
 import './auth.css'
 import { Link } from 'react-router-dom'
+import Themes from '../mainPage/Themes'
 
 function Reg () {
     const handleClick = (e) => {
@@ -8,7 +9,11 @@ function Reg () {
     return(
         <div className="wrapper">
             <h1>Cloud Storage</h1>
-            <Link className='link' to={'/login'}>Вход</Link>
+            <Themes defaultTheme={false}>
+                {() => (
+                    <Link className='link' to={'/login'}>Вход</Link>
+                )}
+            </Themes>
             <form action="" className="form-field">
                 <div className="inps">
                     <input type="email" name="" id="" placeholder='Почта' />
