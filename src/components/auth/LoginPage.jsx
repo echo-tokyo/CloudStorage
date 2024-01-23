@@ -1,5 +1,6 @@
 import './auth.css'
 import { Link } from 'react-router-dom'
+import Themes from '../mainPage/Themes'
 
 function Login () {
     const handleClick = (e) => {
@@ -7,9 +8,14 @@ function Login () {
         localStorage.setItem('registered', 'yes')
     }
     return(
+        <>
         <div className="wrapper">
             <h1>Cloud Storage</h1>
-            <Link className='link' to={'/reg'}>Регистрация</Link>    
+            <Themes defaultTheme={false}>
+                {() => {
+                    <Link className='link' to={'/reg'}>Регистрация</Link>
+                }}
+            </Themes>
             <form action="" className="form-field">
                 <div className="inps">
                     <input type="email" name="" id="" placeholder='Почта' />
@@ -18,6 +24,7 @@ function Login () {
                 <input type="submit" name="" id="" value="Войти" onClick={(e) => handleClick(e)}/>
             </form>
         </div>
+        </>
     )
 }
 
