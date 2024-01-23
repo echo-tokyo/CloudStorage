@@ -2,16 +2,18 @@ import './mainPage.css'
 import Header from './header/Header'
 import FileItem from './fileItem/FileItem'
 import filesData from './file.data'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createGlobalStyle } from 'styled-components';
 
 function FieldItems(){
     const [files, setFile] = useState(filesData)
     
-    const [isClicked, setIsClicked] = useState(false)
+    const [isClicked, setIsClicked] = useState(() => {
+        const savedTheme = localStorage.getItem('isBlackTheme');
+        return savedTheme ? savedTheme === 'true' : true; // используем сохраненное значение, если оно существует
+    })
     const changeTheme = () => {
         setIsClicked(!isClicked)
-        localStorage.setItem('isLightTheme', isClicked)
     }
     
     const GlobalStyles = createGlobalStyle`
@@ -33,6 +35,10 @@ function FieldItems(){
     .file-item{
         border-color: ${props => (props.isClicked ? 'white' : 'black')};
     }`
+
+    useEffect(() => {
+        localStorage.setItem('isBlackTheme', isClicked)
+    }, [isClicked])
 
     return(
         <>
