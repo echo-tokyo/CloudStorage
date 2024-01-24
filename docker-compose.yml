@@ -1,0 +1,46 @@
+version: '3.8'
+
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: DockerfileBackend
+    container_name: cloud_storage_backend
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - "backend_staticfiles:/static"
+    ports:
+      - "8080:8080"
+    networks:
+      proj_network:
+        ipv4_address: 172.16.1.2
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: DockerfileNginx
+    container_name: cloud_storage_nginx
+    volumes:
+      - "backend_staticfiles:/static"
+    ports:
+      - "80:80"
+    networks:
+      proj_network:
+        ipv4_address: 172.16.1.3
+    depends_on:
+      - backend
+
+
+networks:
+  proj_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.1.0/24
+
+
+volumes:
+  backend_staticfiles:
