@@ -12,36 +12,42 @@ function Themes({ defaultTheme, children }) {
 
     const GlobalStyles = createGlobalStyle`
     body{ 
-        background-color: ${props => (props.isClicked ? '#2B2B2B' : 'white')};
+        background-color: ${props => (props.isClicked && '#2B2B2B')};
     }
     p,a,label,h1{
-        color: ${props => (props.isClicked ? 'white' : 'black')};
+        color: ${props => (props.isClicked && 'white')};
     }
     .theme1, .theme2, .theme5{
-        stroke:  ${props => (props.isClicked ? 'white' : 'black')};
+        stroke:  ${props => (props.isClicked && 'white')};
     }
     .theme3, .theme4{
-        fill: ${props => (props.isClicked ? 'white' : 'black')};
+        fill: ${props => (props.isClicked && 'white')};
     }
     main{
-        background-color: ${props => (props.isClicked ? '#383838' : '#DFDFDF')};
+        background-color: ${props => (props.isClicked && '#383838')};
     }
     .file-item{
-        border-color: ${props => (props.isClicked ? 'white' : 'black')};
+        border-color: ${props => (props.isClicked && 'white')};
     }
     .form-field{
-        background-color: ${props => (props.isClicked ? '#383838' : '#DFDFDF')};
+        background-color: ${props => (props.isClicked && '#383838')};
     }
     input[type="email"],[type="password"]{
-        background-color: ${props => (props.isClicked ? '#484848' : '#B4B4B4')};
+        background-color: ${props => (props.isClicked && '#484848')};
         color: ${props => (props.isClicked ? 'white' : 'black')};
     }
     input::placeholder{
-        color: ${props => (props.isClicked ? 'white' : 'black')};
+        color: ${props => (props.isClicked && 'white')};
     }
     input[type="submit"]{
-        background-color: ${props => (props.isClicked ? '#484848' : '#B4B4B4')};
+        background-color: ${props => (props.isClicked && '#484848')};
         color: ${props => (props.isClicked ? 'white' : 'black')};
+    }
+    .modal-window{
+        background-color: ${props => (props.isClicked && '#515151')};
+    }
+    .subtitle{
+        color: ${props => (props.isClicked && '#BCBCBC')};
     }
     `
 

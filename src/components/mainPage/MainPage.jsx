@@ -4,15 +4,25 @@ import FileItem from './fileItem/FileItem'
 import filesData from './file.data'
 import { useState } from 'react'
 import Themes from './Themes'
+import Modal from './modal/Modal'
 
 function FieldItems(){
     const [files, setFile] = useState(filesData)
+
+    const [modal, setModal] = useState(false)
+    const modalOpen = () => {
+        setModal(!modal)
+    }
+    // window.onclick = () => {
+    //     setModal(false)
+    // }
     return(
         <Themes defaultTheme={false}>
             {(changeTheme) => (
                 <>
-                <Header changeTheme={changeTheme}/>
+                <Header changeTheme={changeTheme} modalOpen={modalOpen}/>
                 <main>
+                    {modal && <Modal/>}
                     {files.length ? (
                         files.map(file => <FileItem key={file.id} file={file} setFile={setFile}/>)
                     ) : (

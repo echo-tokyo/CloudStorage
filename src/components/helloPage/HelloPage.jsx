@@ -8,7 +8,7 @@ function HelloPage() {
     useEffect(() => {
     const redirectTimer = setTimeout(() => {
       history('/login');
-    }, 3000);
+    }, 5000);
 
     return () => clearTimeout(redirectTimer);
   }, [history]);

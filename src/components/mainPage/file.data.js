@@ -14,6 +14,31 @@ const filesData = [
         name: 'text.bat',
         size: '999 тб'
     },
+    {
+        id: 4,
+        name: 'text.bat',
+        size: '999 тб'
+    },
+    {
+        id: 5,
+        name: 'text.bat',
+        size: '999 тб'
+    },
+    {
+        id: 6,
+        name: 'text.bat',
+        size: '999 тб'
+    },
+    {
+        id: 7,
+        name: 'text.bat',
+        size: '999 тб'
+    },
+    {
+        id: 8,
+        name: 'text.bat',
+        size: '999 тб'
+    },
 ]
 
 export default filesData
