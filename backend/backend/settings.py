@@ -128,7 +128,7 @@ REST_FRAMEWORK = {
     ),
 }
 # JWT_EXPIRE = timedelta(days=10)
-JWT_EXPIRE = timedelta(minutes=4)
+JWT_EXPIRE = timedelta(days=1)
 
 
 CORS_ORIGIN_WHITELIST = [
