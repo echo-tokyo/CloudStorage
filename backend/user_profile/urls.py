@@ -4,5 +4,5 @@ from .views import UserProfileAPIView
 
 
 urlpatterns = [
-    path('', UserProfileAPIView.as_view()),
+    path('get/', UserProfileAPIView.as_view()),
 ]
