@@ -6,16 +6,14 @@ import { useState } from 'react'
 import Themes from './Themes'
 import Modal from './modal/Modal'
 
-function FieldItems(){
+function MainPage(){
     const [files, setFile] = useState(filesData)
 
     const [modal, setModal] = useState(false)
     const modalOpen = () => {
         setModal(!modal)
     }
-    // window.onclick = () => {
-    //     setModal(false)
-    // }
+    
     return(
         <Themes defaultTheme={false}>
             {(changeTheme) => (
@@ -35,4 +33,4 @@ function FieldItems(){
     )
 }
 
-export default FieldItems 
+export default MainPage 

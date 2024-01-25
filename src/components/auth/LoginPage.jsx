@@ -1,12 +1,16 @@
 import './auth.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Themes from '../mainPage/Themes'
 
 function Login () {
+    const history = useNavigate()
+
     const handleClick = (e) => {
         e.preventDefault()
         localStorage.setItem('registered', 'yes')
+        history('/')
     }
+
     return(
         <>
         <div className="wrapper">

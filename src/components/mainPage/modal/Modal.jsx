@@ -5,11 +5,15 @@ import { useState } from 'react'
 
 function Modal () {
     const [files, setFile] = useState(filesData)
+    const trashRemove = () => {
+        setFile('')
+    }
+    
     return(
         <div className="modal-window">
             <div className="titles">
                 <p>Корзина</p>
-                <p className='subtitle'>Очистить</p>
+                <p className='subtitle' onClick={()=> trashRemove()}>Очистить</p>
             </div>
             <div className="files">
                 {files.length ? (
