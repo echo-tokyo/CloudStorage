@@ -1,6 +1,11 @@
+import jwt
+
+from datetime import datetime, timedelta
+
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.db import models
 
 from .managers import CustomUserManager
 
@@ -13,12 +18,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=False,
         blank=False,
         db_index=True,
-    )
-    token = models.CharField(
-        verbose_name=_('token'),
-        max_length=255,
-        null=True,
-        blank=True,
     )
     created_at = models.DateTimeField(
         verbose_name=_('created at'),
@@ -51,3 +50,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
+
+    @property
+    def token(self):
+        """Get token"""
+        return self._generate_jwt_token()
+
+    def _generate_jwt_token(self):
+        """Generate JWT-token with user id, expire in JWT_EXPIRE time"""
+
+        dt = datetime.now() + settings.JWT_EXPIRE
+
+        token = jwt.encode({
+            'id': self.pk,
+            'exp': int(dt.strftime('%s'))
+        }, settings.SECRET_KEY, algorithm='HS256')
+
+        return token
