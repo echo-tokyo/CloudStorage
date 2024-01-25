@@ -126,7 +126,7 @@ REST_FRAMEWORK = {
     ),
 }
 # JWT_EXPIRE = timedelta(days=10)
-JWT_EXPIRE = timedelta(minutes=2)
+JWT_EXPIRE = timedelta(minutes=4)
 
 
 # Internationalization
