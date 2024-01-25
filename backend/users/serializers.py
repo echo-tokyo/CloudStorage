@@ -14,7 +14,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'token')
+        fields = ('id', 'email', 'password', 'token')
+        read_only_fields = ('id',)
 
     def create(self, validated_data):
         new_user = User.objects.create_user(**validated_data)
@@ -24,6 +25,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class UserLoginSerializer(serializers.Serializer):
     """Serialization of user login"""
 
+    id = serializers.IntegerField(read_only=True)
     email = serializers.CharField(max_length=255)
     password = serializers.CharField(max_length=128, min_length=8, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
@@ -53,6 +55,12 @@ class UserLoginSerializer(serializers.Serializer):
 
         # возвращаем словарь проверенных данных
         return {
+            'id': user.id,
             'email': user.email,
             'token': user.token,
         }
+
+
+class GetTokenSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    token = serializers.CharField(max_length=255)
