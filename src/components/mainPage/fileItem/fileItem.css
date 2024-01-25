@@ -19,3 +19,11 @@
     display: flex;
     gap: 10px;
 }
+.file-item p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.file-item>p{
+    padding-right: 20px;
+}
