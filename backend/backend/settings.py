@@ -41,6 +41,7 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
 INSTALLED_APPS = [
     # installed apps
     'rest_framework',
+    'corsheaders',
     # my apps
     'users',
     'user_profile',
@@ -58,6 +59,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -129,9 +131,18 @@ REST_FRAMEWORK = {
 JWT_EXPIRE = timedelta(minutes=4)
 
 
+CORS_ORIGIN_WHITELIST = [
+    # # real frontend host&port
+    # "http://frontend:5050"
+
+    # development (NOT USE IN PROD)
+    "null",
+]
+
+
 # Internationalization
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_TZ = True
 
