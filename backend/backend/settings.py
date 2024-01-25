@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 import os
-from pathlib import Path
+from datetime import timedelta
 from dotenv import load_dotenv
+from pathlib import Path
 
 
 # загрузка переменных окружения
@@ -115,6 +116,17 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'users.exceptions.core_exception_handler',
+    'NON_FIELD_ERRORS_KEY': 'error',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'users.backends.JWTAuthentication',
+    ),
+}
+# JWT_EXPIRE = timedelta(days=10)
+JWT_EXPIRE = timedelta(minutes=2)
 
 
 # Internationalization
