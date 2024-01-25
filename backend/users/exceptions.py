@@ -8,7 +8,8 @@ def core_exception_handler(exc, context):
     # доступ к сгенерированному DRF - получим его заранее здесь.
     response = exception_handler(exc, context)
     handlers = {
-        'ValidationError': _handle_generic_error
+        'ValidationError': _handle_generic_error,
+        'AuthenticationFailed': _handle_generic_error
     }
     # Определить тип текущего исключения. Мы воспользуемся этим сразу далее,
     # чтобы решить, делать ли это самостоятельно или отдать эту работу DRF.
