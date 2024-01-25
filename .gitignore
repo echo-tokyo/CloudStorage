@@ -72,5 +72,3 @@ venv.bak/
 
 # My secure data
 /db_info/dumps
-/backend/media/files
-/backend/media
