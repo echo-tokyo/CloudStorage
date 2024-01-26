@@ -127,17 +127,24 @@ REST_FRAMEWORK = {
         'users.backends.JWTAuthentication',
     ),
 }
-# JWT_EXPIRE = timedelta(days=10)
-JWT_EXPIRE = timedelta(days=1)
+JWT_EXPIRE = timedelta(days=30)
 
 
-CORS_ORIGIN_WHITELIST = [
-    # # real frontend host&port
-    # "http://frontend:5050"
+# development (NOT USE IN PROD)
+CORS_ALLOW_ALL_ORIGINS = True
 
-    # development (NOT USE IN PROD)
-    "null",
-]
+# CORS_ALLOWED_ORIGINS = [
+#    # real frontend host&port
+#    "http://frontend:5050"
+# ]
+#
+# CORS_ALLOW_METHODS = (
+#    "DELETE",
+#    "GET",
+#    "OPTIONS",
+#    "PATCH",
+#    "POST",
+# )
 
 
 # Internationalization
