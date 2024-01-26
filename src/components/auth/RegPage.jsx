@@ -1,6 +1,7 @@
 import './auth.css'
 import { Link } from 'react-router-dom'
 import Themes from '../mainPage/Themes'
+import axios from 'axios'
 
 function Reg () {
     const handleClick = (e) => {
@@ -11,25 +12,19 @@ function Reg () {
             password: e.target.password.value
         }
 
-        fetch('http://79.137.204.172/api/user/reg/', {
-            method: 'POST',
-            body: JSON.stringify(formData)
-        })
+        axios.post('http://79.137.204.172/api/user/reg/', JSON.stringify(formData) )
 
         .then(response => {
-            if(response.ok) {
-              return response.json();
+            if (response.status == 201) {
+                return response.json()
+            } else{
+                throw new Error('network response not ok.')
             }
-            throw new Error('Network response was not ok.');
-        })
-
-        .then(data => {
-            console.log('Успешный ответ от сервера', data);
         })
 
         .catch(error => {
-            console.error('Произошла ошибка при отправке запроса', error);
-        });
+            console.error('произошла ошибка при отправке запроса, ', error)
+        })
     }
     return(
         <div className="wrapper">

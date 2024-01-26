@@ -1,6 +1,7 @@
 import './auth.css'
 import { Link, useNavigate } from 'react-router-dom'
 import Themes from '../mainPage/Themes'
+import axios from 'axios'
 
 function Login () {
     const history = useNavigate()
@@ -14,27 +15,25 @@ function Login () {
             password: e.target.password.value
         }
 
-        fetch('http://79.137.204.172/api/user/login/', {
-            method: 'POST',
-            body: JSON.stringify(formData)
-        })
+        axios.post('http://79.137.204.172/api/user/login/', JSON.stringify(formData))
 
         .then(response => {
-            if (response.ok) {
-              return response.json();
+            if (response.status == 200){
+                const token = response.data.token
+                localStorage.setItem('token', token)
+                history('/')
+            } else{
+                throw new Error('network response not ok.')
             }
-            throw new Error('Network response was not ok.');
         })
 
         .then(data => {
-            const token = data.token;
-            localStorage.setItem('token', token);
-            history('/');
+            console.log('успешный ответ от сервера ', data)
         })
         
         .catch(error => {
-            console.error('Произошла ошибка при отправке запроса', error);
-        });
+            console.error('произошла ошибка при отправке запроса ', error)
+        })
     }
 
     return(
