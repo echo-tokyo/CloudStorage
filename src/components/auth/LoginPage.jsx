@@ -8,7 +8,33 @@ function Login () {
     const handleClick = (e) => {
         e.preventDefault()
         localStorage.setItem('registered', 'yes')
-        history('/')
+
+        const formData = {
+            email: e.target.email.value,
+            password: e.target.password.value
+        }
+
+        fetch('http://79.137.204.172/api/user/login/', {
+            method: 'POST',
+            body: JSON.stringify(formData)
+        })
+
+        .then(response => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+        })
+
+        .then(data => {
+            const token = data.token;
+            localStorage.setItem('token', token);
+            history('/');
+        })
+        
+        .catch(error => {
+            console.error('Произошла ошибка при отправке запроса', error);
+        });
     }
 
     return(
@@ -20,12 +46,12 @@ function Login () {
                     <Link className='link' to={'/reg'}>Регистрация</Link>
                 )}
             </Themes>
-            <form action="" className="form-field">
+            <form action="" className="form-field" onSubmit={(e) => handleClick(e)}>
                 <div className="inps">
-                    <input type="email" name="" id="" placeholder='Почта' />
-                    <input type="password" name="" id="" placeholder='Пароль' />
+                    <input type="email" name='email' placeholder='Почта' />
+                    <input type="password" name='password' placeholder='Пароль' />
                 </div>
-                <input type="submit" name="" id="" value="Войти" onClick={(e) => handleClick(e)}/>
+                <input type="submit" value="Войти"/>
             </form>
         </div>
         </>
