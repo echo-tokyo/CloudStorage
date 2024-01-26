@@ -1,7 +1,5 @@
 # Cloud Storage
 
-<hr>
-
 ## Backend
 
 #### Status of deployment:
