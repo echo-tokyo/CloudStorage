@@ -4,7 +4,7 @@ import { createGlobalStyle } from 'styled-components';
 function Themes({ defaultTheme, children }) {
     const [isClicked, setIsClicked] = useState(() => {
         const savedTheme = localStorage.getItem('isBlackTheme');
-        return savedTheme ? savedTheme === 'true' : defaultTheme; // используем сохраненное значение, если оно существует
+        return savedTheme ? savedTheme === 'true' : defaultTheme;
     })
     const changeTheme = () => {
         setIsClicked(!isClicked);
@@ -49,7 +49,16 @@ function Themes({ defaultTheme, children }) {
     .subtitle{
         color: ${props => (props.isClicked && '#BCBCBC')};
     }
-    `
+    .file-item:hover{
+        background: ${props => (props.isClicked && 'rgba(217, 217, 217, 0.10)')};
+    }
+    .modal-profile{
+        background-color: ${props => (props.isClicked && '#515151')};
+    }
+    .modal-form input[type="text"], .modal-form input[type="email"], .modal-form input[type="password"], .modal-form input[type="submit"]{
+        background-color: ${props => (props.isClicked && '#757575')};
+        color: ${props => (props.isClicked && 'white')};
+    } `
 
     useEffect(() => {
         localStorage.setItem('isBlackTheme', isClicked);

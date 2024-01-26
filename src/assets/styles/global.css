@@ -17,7 +17,7 @@ h1{
 svg, path{
     user-select: none;
 }
-input[type="email"],[type="password"]{
+input[type="email"],[type="password"],[type="text"]{
     width: 407px;
     height: 70px;
     background-color: #B4B4B4;
@@ -29,7 +29,6 @@ input[type="email"],[type="password"]{
 input::placeholder{
     color: black;
 }
-
 input[type="submit"]{
     width: 407px;
     height: 70px;
@@ -41,4 +40,7 @@ input[type="submit"]{
 }
 svg{
     cursor: pointer;
+}
+.file-item:hover{
+    background: rgba(0, 0, 0, 0.10);
 }

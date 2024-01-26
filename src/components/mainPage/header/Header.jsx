@@ -1,12 +1,27 @@
+import { useNavigate } from 'react-router-dom'
 import './header.css'
-import { Link } from 'react-router-dom'
 
-function Header({changeTheme, modalOpen}) {
+function Header({changeTheme, modalOpen, profileClick}) {
+    const navigate = useNavigate()
+
+    const logoutClick = () => {
+        // отправка запроса с токеном, чтобы его удалили
+        navigate('/login')
+    }
+
+    const filesPush = () => {
+        // отправка файлов на сервер
+        console.log('отправлено')
+    }
+
     return( 
         <header>
-            <Link to={'/login'}>Выйти</Link>
+            <div className="header_item2">
+                <div className="avatar" onClick={() => profileClick()}></div>
+                <p onClick={() => logoutClick()}>Выйти</p>
+            </div>
             <div className='header_item'>
-                <input type="file" id="file-upload"/>
+                <input type="file" id="file-upload"  onChange={() => filesPush()}/>
                 <label htmlFor="file-upload" className='download'>Файлы</label>
                 <label htmlFor="file-upload">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">

@@ -12,18 +12,17 @@ function Reg () {
             password: e.target.password.value
         }
 
-        axios.post('http://79.137.204.172/api/user/reg/', JSON.stringify(formData) )
+        console.log(formData)
+        console.log(JSON.stringify(formData))
+
+        axios.post('http://79.137.204.172/api/user/reg/', formData, {headers: {'Content-Type': 'application/json'}})
 
         .then(response => {
-            if (response.status == 201) {
-                return response.json()
-            } else{
-                throw new Error('network response not ok.')
-            }
+            console.log(response.data)
         })
 
         .catch(error => {
-            console.error('произошла ошибка при отправке запроса, ', error)
+            console.error('произошла ошибка при отправке запроса, ', error.response.data)
         })
     }
     return(
@@ -34,7 +33,7 @@ function Reg () {
                     <Link className='link' to={'/login'}>Вход</Link>
                 )}
             </Themes>
-            <form action="" className="form-field" onSubmit={(e) => handleClick(e)}>
+            <form className="form-field" onSubmit={(e) => handleClick(e)}>
                 <div className="inps">
                     <input type="email" name="email" placeholder='Почта' />
                     <input type="password" name="password" placeholder='Пароль' />

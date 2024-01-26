@@ -3,6 +3,7 @@ import './fileItem.css'
 function FileItem({file, setFile}) {
     const handleRemove = () => {
         setFile(prev => prev.filter((el) => el.id !== file.id))
+        // при клике на крестик локально очищается массив полученных данных с сервера и ассинхронно шлется запрос на их удаление с сервера
     }
     return(
         <div className="file-item">

@@ -4,7 +4,7 @@ import Themes from '../mainPage/Themes'
 import axios from 'axios'
 
 function Login () {
-    const history = useNavigate()
+    const navigate = useNavigate()
 
     const handleClick = (e) => {
         e.preventDefault()
@@ -15,24 +15,16 @@ function Login () {
             password: e.target.password.value
         }
 
-        axios.post('http://79.137.204.172/api/user/login/', JSON.stringify(formData))
+        axios.post('http://79.137.204.172/api/user/login/', formData, {headers: {'Content-Type': 'application/json'}})
 
         .then(response => {
-            if (response.status == 200){
-                const token = response.data.token
-                localStorage.setItem('token', token)
-                history('/')
-            } else{
-                throw new Error('network response not ok.')
-            }
+            const token = response.data.token
+            localStorage.setItem('token', token)
+            navigate('/')
         })
 
-        .then(data => {
-            console.log('успешный ответ от сервера ', data)
-        })
-        
         .catch(error => {
-            console.error('произошла ошибка при отправке запроса ', error)
+            console.error('произошла ошибка при отправке запроса ', error.response.data)
         })
     }
 
