@@ -17,3 +17,7 @@ class UserProfileAPIView(APIView):
         serializer = self.serializer_class(instance=user_profile)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class EditUserProfileAPIView(APIView):
+    ...
