@@ -28,7 +28,6 @@
 
 ```json
 {
-    "id": 5,
     "email": "test2@test.com",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZXhwIjoxNzA2MjE5MjEwfQ.LZnA1fdKEP9nl3gdA-lo4myzj4ybbCH_wiFOL-rPszA"
 }
@@ -38,7 +37,6 @@
 
 | ключ  | что это такое                              |
 |-------|--------------------------------------------|
-| id    | Уникальный идентификатор юзера             |
 | email | Почта только что зарегистрированного юзера |
 | token | Токен (пока что, срок действия - 1 день)   |
 

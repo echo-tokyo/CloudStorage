@@ -32,7 +32,6 @@
 
 ```json
 {
-    "id": 5,
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZXhwIjoxNzA2MjE5MjU2fQ.aEAyGLGb_MilvtytmDQ4jrTV833Wd9bRHnW1JsTsI8g"
 }
 ```
@@ -41,7 +40,6 @@
 
 | ключ  | что это такое                            |
 |-------|------------------------------------------|
-| id    | Уникальный идентификатор юзера           |
 | token | Токен (пока что, срок действия - 1 день) |
 
 <hr>
