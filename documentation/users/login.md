@@ -10,7 +10,7 @@
 
 ```json
 {
-    "email": "test2@test.com",
+    "email": "test9@test.ru",
     "password": "qwerty123"
 }
 ```
@@ -28,17 +28,21 @@
 
 ```json
 {
-    "email": "test2@test.com",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZXhwIjoxNzA2MjE5MjMyfQ.yMy6RiCFvhitLZ0IavmQS4P_O1-ksLQgaA8JsB3LLl0"
+    "email": "test9@test.ru",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImV4cCI6MTcwOTA1OTk4OH0.xt2SZsi1CGMtdraR8ovC_6oA4hYIL16-MS3EJ6-3s6Q",
+    "nickname": "User_000010",
+    "photo": "http://79.137.204.172/static/profile_photos/default_user_profile_photo.png"
 }
 ```
 
 ### ** _Объяснение значений ответа:_
 
-| ключ  | что это такое                            |
-|-------|------------------------------------------|
-| email | Почта только что вошедшего юзера         |
-| token | Токен (пока что, срок действия - 1 день) |
+| ключ     | что это такое                     |
+|----------|-----------------------------------|
+| email    | Почта только что вошедшего юзера  |
+| token    | Токен для юзера                   |
+| nickname | Ник юзера                         |
+| photo    | Фото профиля юзера (ссылка)       |
 
 <hr>
 
