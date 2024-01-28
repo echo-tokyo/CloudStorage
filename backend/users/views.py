@@ -1,11 +1,12 @@
 from rest_framework import status
-from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.views import APIView
 
-from .serializers import UserRegistrationSerializer, UserLoginSerializer, EditUserSerializer, GetTokenSerializer
+from .serializers import (UserRegistrationSerializer, UserLoginSerializer,
+                          EditUserSerializer, ChangeUserPasswordSerializer,
+                          GetTokenSerializer)
 
 
 class UserRegistrationAPIView(APIView):
@@ -42,13 +43,30 @@ class EditUserAPIView(APIView):
     serializer_class = EditUserSerializer
 
     def patch(self, request: Request):
-        print('request.data', request.data)
+        # print('request.data', request.data)
 
         serializer = self.serializer_class(instance=request.user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        print('serializer.data', serializer.data)
+        # print('serializer.data', serializer.data)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class ChangeUserPasswordAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ChangeUserPasswordSerializer
+
+    def put(self, request: Request):
+        user = request.user
+
+        # Добавление пользователя из запроса в контекст
+        self.serializer_class.context = {'user': user}
+
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
