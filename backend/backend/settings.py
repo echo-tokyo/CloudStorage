@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'corsheaders',
     # my apps
     'users',
-    'user_profile',
     'storage_api',
     'reviews',
     # default apps
@@ -168,6 +167,7 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+DEFAULT_PROFILE_PHOTO = 'profile_photos/default_user_profile_photo.png'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

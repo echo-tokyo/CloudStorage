@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS user (
 	id INT NOT NULL AUTO_INCREMENT,
 	email VARCHAR(100) NOT NULL UNIQUE,
 	password VARCHAR(150) NOT NULL,
-	token VARCHAR(255) NULL,
+	nickname VARCHAR(150) NOT NULL DEFAULT 'User',
+	photo VARCHAR(255) NOT NULL DEFAULT '/path/to/photo.png',
 	is_active BOOLEAN NOT NULL DEFAULT 1,
 	is_staff BOOLEAN NOT NULL DEFAULT 0,
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -27,22 +28,12 @@ CREATE TABLE IF NOT EXISTS user (
 );
 CREATE INDEX user_email_index ON user(email);
 
--- Create the Profile table
-CREATE TABLE IF NOT EXISTS profile (
-	id INT NOT NULL AUTO_INCREMENT,
-	user_id INT NOT NULL UNIQUE,
-	nickname VARCHAR(150) NOT NULL DEFAULT 'User',
-	photo VARCHAR(255) NOT NULL DEFAULT '/path/to/photo.png',
-	CONSTRAINT profile_id_pk PRIMARY KEY (id),
-	CONSTRAINT profile_user_fk FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
-);
-
 -- Create the Folder table
 CREATE TABLE IF NOT EXISTS folder (
 	id INT NOT NULL AUTO_INCREMENT,
 	user_id INT NOT NULL,
 	name VARCHAR(50) NOT NULL,
-	parent_id INT NULL,
+	parent_id INT,
 	recycle_bin BOOLEAN NOT NULL DEFAULT 0,
 	star BOOLEAN NOT NULL DEFAULT 0,
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -79,29 +70,16 @@ CREATE TABLE IF NOT EXISTS review (
 );
 CREATE INDEX review_user_index ON review(user_id);
 
+
 -- TRIGGERS
-
-
--- Create the AddProfile trigger for adding profile for just created user
-DELIMITER //
-CREATE TRIGGER add_profile AFTER INSERT ON user
-FOR EACH ROW BEGIN
-	DECLARE inserted_id INT;
-	SELECT NEW.id INTO inserted_id;
-
-	INSERT INTO profile (user_id, nickname, photo) VALUES
-		(inserted_id, CONCAT('User_', inserted_id), DEFAULT);
-END;
-//
-DELIMITER ;
 
 
 -- Create the AddRootFolder trigger for adding root folder for just created user
 DELIMITER //
-CREATE TRIGGER add_roop_folder AFTER INSERT ON user
+CREATE TRIGGER add_root_folder AFTER INSERT ON user
 FOR EACH ROW BEGIN
     DECLARE inserted_id INT;
-    SELECT NEW.id INTO inserted_id;
+    SELECT NEW.id INTO inserted_id FOR UPDATE;
 
     INSERT INTO folder (user_id, name) VALUES (inserted_id, '/');
 END;
