@@ -6,7 +6,7 @@ function Header({changeTheme, modalOpen, profileClick}) {
 
     const logoutClick = () => {
         // отправка запроса с токеном, чтобы его удалили
-        localStorage.removeItem('registered')
+        localStorage.removeItem('token')
         navigate('/login')
     }
 

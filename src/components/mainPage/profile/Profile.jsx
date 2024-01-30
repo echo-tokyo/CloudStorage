@@ -1,25 +1,52 @@
 import './profile.css'
 import axios from 'axios'
+import { useState } from 'react'
+import ChangePassword from './changePassword/changePassword'
+import ChangeUserData from './changeUserData/ChangeUserData'
 
 function Profile () { 
+    const [passChange, setPassChange] = useState(false)
+
     const sendProfileData = (e) => {
         e.preventDefault()
         const token = localStorage.getItem('token')
 
         const profileData = {
             email: e.target.email.value,
-            name: e.target.name.value
         }
         
-        console.log(profileData)
         axios.patch('http://79.137.204.172/api/user/edit/', profileData, {headers:{'Content-Type': 'application/json', "Authorization": `Bearer ${token}`}})
+
         .then((response) => {
             document.querySelector('.send').style = `border: 2px solid lightgreen`
             console.log(response.data)
         })
+
         .catch((error) => {
             document.querySelector('.send').style = `border: 2px solid red`
-            console.error('ошибка епта', error) 
+            console.error('Произошла ошибка при отправке запроса ', error) 
+        })
+    }
+
+    const sendNewPassword = (e) => {
+        e.preventDefault()
+        const token = localStorage.getItem('token')
+
+        const newPasswrodData = {
+            old_password: e.target.oldPassword.value,
+            new_password: e.target.newPassword.value
+        }
+
+        axios.put('http://79.137.204.172/api/user/change-password/', newPasswrodData, {headers:{'Content-Type': 'application/json', "Authorization": `Bearer ${token}`}})
+
+        .then((response) => {
+            document.querySelector('.send').style = `border: 2px solid lightgreen`
+            console.log(response.data)
+        })
+
+        .catch((error) => {
+            document.querySelector('.send').style = `border: 2px solid red`
+            console.error('Произошла ошибка при отправке запроса ', error) 
         })
     }   
 
@@ -32,12 +59,11 @@ function Profile () {
                 <label htmlFor="file-upload" className='download'>Загрузить фото</label>
                 <p className='subtitle'>JPG или PNG, мин 100 х 100 пикс, до 5 Mb</p>
             </div>
-            <form action="" className='modal-form' onSubmit={(e) => sendProfileData(e)}>
-                <input name='name' type="text" placeholder="ChelovekPayk"/>
-                <input name='email' type="email" placeholder="example@gmail.com"/>
-                <input name='password' type="password" placeholder="*********"/>
-                <input className='send' type="submit" value="Сохранить"/>
-            </form>
+            {passChange == false ? (
+                <ChangeUserData setPassChange={setPassChange} sendProfileData={sendProfileData} />
+                ) : (
+                <ChangePassword setPassChange={setPassChange} sendNewPassword={sendNewPassword}/>
+            )}
         </div>
     )
 }

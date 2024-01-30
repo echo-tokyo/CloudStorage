@@ -4,7 +4,7 @@ import MainPage from '../mainPage/MainPage'
 function Home(){
     return(
         <>
-        {localStorage.getItem('registered') ? (
+        {localStorage.getItem('token') ? (
             <MainPage />
         ) : (
                 <HelloPage />

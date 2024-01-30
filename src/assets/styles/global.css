@@ -47,3 +47,6 @@ svg{
 .error{
     border: 2px solid red;
 }
+.pLink{
+    cursor: pointer;
+}
