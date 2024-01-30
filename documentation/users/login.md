@@ -28,21 +28,15 @@
 
 ```json
 {
-    "email": "test9@test.ru",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImV4cCI6MTcwOTA1OTk4OH0.xt2SZsi1CGMtdraR8ovC_6oA4hYIL16-MS3EJ6-3s6Q",
-    "nickname": "User_000010",
-    "photo": "http://79.137.204.172/static/profile_photos/default_user_profile_photo.png"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImV4cCI6MTcwOTA1OTk4OH0.xt2SZsi1CGMtdraR8ovC_6oA4hYIL16-MS3EJ6-3s6Q"
 }
 ```
 
 ### ** _Объяснение значений ответа:_
 
-| ключ     | что это такое                     |
-|----------|-----------------------------------|
-| email    | Почта только что вошедшего юзера  |
-| token    | Токен для юзера                   |
-| nickname | Ник юзера                         |
-| photo    | Фото профиля юзера (ссылка)       |
+| ключ     | что это такое   |
+|----------|-----------------|
+| token    | Токен для юзера |
 
 <hr>
 
