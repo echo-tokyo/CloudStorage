@@ -16,14 +16,12 @@ function Reg () {
         }
 
         axios.post('http://79.137.204.172/api/user/reg/', formData, {headers: {'Content-Type': 'application/json'}})
-
         .then(response => {
             localStorage.setItem('token', response.data.token)
             navigate('/')
         })
-
         .catch(error => {
-            console.error('Произошла ошибка при отправке запроса, ', error.response.data)
+            console.error('Произошла ошибка при регистрации, ', error.response.data)
             setDataCorrect(false)
         })
     }

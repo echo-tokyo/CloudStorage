@@ -16,8 +16,9 @@ function MainPage(){
         .then(response => {
             setProfilePhoto(response.data.photo_url)
         })
-        .catch(() => {
+        .catch((error) => {
             setProfilePhoto('../../../../public/i.webp')
+            console.error('Произошла ошибка при получении аватарки ', error)
         })
     }, [])
     

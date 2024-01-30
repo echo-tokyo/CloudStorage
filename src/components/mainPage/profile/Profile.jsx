@@ -15,7 +15,7 @@ function Profile ({profilePhoto}) {
             email: e.target.email.value,
         }
         
-        axios.patch('http://79.137.204.172/api/user/edit/', profileData, {headers:{'Content-Type': 'application/json', "Authorization": `Bearer ${token}`}})
+        axios.put('http://79.137.204.172/api/user/edit/', profileData, {headers:{'Content-Type': 'application/json', "Authorization": `Bearer ${token}`}})
 
         .then((response) => {
             document.querySelector('.send').style = `border: 2px solid lightgreen`
@@ -24,7 +24,7 @@ function Profile ({profilePhoto}) {
 
         .catch((error) => {
             document.querySelector('.send').style = `border: 2px solid red`
-            console.error('Произошла ошибка при отправке запроса ', error) 
+            console.error('Произошла ошибка при смене почты ', error) 
         })
     }
 
@@ -46,7 +46,7 @@ function Profile ({profilePhoto}) {
 
         .catch((error) => {
             document.querySelector('.send').style = `border: 2px solid red`
-            console.error('Произошла ошибка при отправке запроса ', error) 
+            console.error('Произошла ошибка при смене пароля ', error) 
         })
     }   
 

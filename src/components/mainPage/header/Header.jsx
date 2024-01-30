@@ -1,12 +1,22 @@
 import { useNavigate } from 'react-router-dom'
 import './header.css'
+import axios from 'axios'
 
 function Header({changeTheme, modalOpen, profileClick, profilePhoto}) {
     const navigate = useNavigate()
     const logoutClick = () => {
+        const token = localStorage.getItem('token')
+
+        axios.post('http://79.137.204.172/api/user/logout/', token, {headers: {'Authorization': `Bearer ${token}`}})
+        .then(response => {
+            console.log(response.data)
+        })
+        .catch(error => {
+            console.error('Произошла ошибка при выходе ', error)
+        })
         
-        localStorage.removeItem('token')
         navigate('/login')
+        localStorage.removeItem('token')
     }
 
     const filesPush = () => {
