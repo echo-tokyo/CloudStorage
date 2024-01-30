@@ -1,6 +1,3 @@
-from re import sub as re_sub
-
-from django.conf import settings
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
@@ -17,32 +14,23 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'token', 'nickname', 'photo')
-        read_only_fields = ('nickname', 'photo')
+        fields = ('email', 'password', 'token')
 
     def create(self, validated_data):
         new_user = User.objects.create_user(**validated_data)
         return new_user
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        photo_path_part = re_sub('^/media/', '', representation['photo'])
-        representation['photo'] = f'http://{settings.IP_OR_DNS_SERVER}/static/{photo_path_part}'
-
-        return representation
-
 
 class UserLoginSerializer(serializers.ModelSerializer):
     """Serialization of user login"""
 
-    email = serializers.CharField(max_length=255)
+    email = serializers.CharField(max_length=255, write_only=True)
     password = serializers.CharField(max_length=128, min_length=8, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'token', 'nickname', 'photo')
-        read_only_fields = ('nickname', 'photo')
+        fields = ('email', 'password', 'token')
 
     def validate(self, data):
         """Checking the UserLoginSerializer for validity"""
@@ -69,44 +57,27 @@ class UserLoginSerializer(serializers.ModelSerializer):
 
         # возвращаем словарь проверенных данных
         return {
-            'email': user.email,
             'token': user.token,
-            'nickname': user.nickname,
-            'photo': user.photo,
         }
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        photo_path_part = re_sub('^/media/', '', representation['photo'])
-        representation['photo'] = f'http://{settings.IP_OR_DNS_SERVER}/static/{photo_path_part}'
-
-        return representation
 
 
 class EditUserSerializer(serializers.ModelSerializer):
-    """Serializer for edit user's email or password or both"""
+    """Serializer for edit user's email"""
 
     class Meta:
         model = User
-        fields = ('email', 'nickname')
+        fields = ('email',)
 
     def update(self, instance: User, validated_data):
         new_email = validated_data.get('email', instance.email)
-        new_nickname = validated_data.get('nickname', instance.nickname)
-        # new_password = validated_data.get('password', None)
-        # new_photo = validated_data.get('photo', instance.photo)
-
         instance.email = new_email
-        instance.nickname = new_nickname
-        # instance.photo = new_photo
-        # if new_password is not None:
-        #     instance.set_password(new_password)
-
         instance.save()
         return instance
 
 
 class ChangeUserPasswordSerializer(serializers.Serializer):
+    """Serializer for edit user's password"""
+
     old_password = serializers.CharField(max_length=128, min_length=8, write_only=True)
     new_password = serializers.CharField(max_length=128, min_length=8, write_only=True)
     email = serializers.CharField(max_length=255, read_only=True)
@@ -160,12 +131,3 @@ class ChangeUserPasswordSerializer(serializers.Serializer):
         representation = super().to_representation(instance)
         representation['result'] = 'Password was changed!'
         return representation
-
-
-class GetTokenSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    token = serializers.CharField(max_length=255)
-
-# class MoveToBlacklistTokenSerializer(serializers.Serializer):
-#     id = serializers.IntegerField()
-#     token = serializers.CharField(max_length=255)

@@ -5,8 +5,7 @@ from rest_framework.request import Request
 from rest_framework.views import APIView
 
 from .serializers import (UserRegistrationSerializer, UserLoginSerializer,
-                          EditUserSerializer, ChangeUserPasswordSerializer,
-                          GetTokenSerializer)
+                          EditUserSerializer, ChangeUserPasswordSerializer)
 
 
 class UserRegistrationAPIView(APIView):
@@ -42,7 +41,7 @@ class EditUserAPIView(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = EditUserSerializer
 
-    def patch(self, request: Request):
+    def put(self, request: Request):
         # print('request.data', request.data)
 
         serializer = self.serializer_class(instance=request.user, data=request.data, partial=True)
@@ -51,7 +50,7 @@ class EditUserAPIView(APIView):
 
         # print('serializer.data', serializer.data)
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ChangeUserPasswordAPIView(APIView):
@@ -67,24 +66,5 @@ class ChangeUserPasswordAPIView(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-class GetTokenAPIView(APIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = GetTokenSerializer
-
-    def post(self, request: Request):
-        user = request.user
-
-        user_data = {
-            'id': user.id,
-            'token': user.token,
-        }
-        print(user_data)
-
-        serializer = self.serializer_class(data=user_data)
-        serializer.is_valid(raise_exception=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
