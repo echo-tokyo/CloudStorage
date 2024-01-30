@@ -1,3 +1,5 @@
+from django.http import JsonResponse
+
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -6,6 +8,7 @@ from rest_framework.views import APIView
 
 from .serializers import (UserRegistrationSerializer, UserLoginSerializer,
                           EditUserSerializer, ChangeUserPasswordSerializer)
+from .service import delete_tokens_when_change_passwd, delete_one_token
 
 
 class UserRegistrationAPIView(APIView):
@@ -43,6 +46,21 @@ class UserLoginAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class UserLogoutAPIView(APIView):
+    """Logout for user"""
+
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request: Request):
+        token = request.auth
+
+        delete_one_token(token=token)
+
+        # ответ об успехе
+        response = JsonResponse(data={'result': 'Logout successfully!'}, status=status.HTTP_200_OK)
+        return response
+
+
 class EditUserAPIView(APIView):
     """Edit existing user email"""
 
@@ -68,6 +86,7 @@ class ChangeUserPasswordAPIView(APIView):
     def put(self, request: Request):
         # вытаскиваем данные о юзере из запроса
         user = request.user
+        token = request.auth
 
         # Добавление пользователя из запроса в контекст
         self.serializer_class.context = {'user': user}
@@ -76,6 +95,8 @@ class ChangeUserPasswordAPIView(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
+        delete_tokens_when_change_passwd(user=user, cur_token=token)
 
         # возвращаем успех
         return Response(serializer.data, status=status.HTTP_200_OK)

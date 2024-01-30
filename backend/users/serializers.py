@@ -130,5 +130,5 @@ class ChangeUserPasswordSerializer(serializers.Serializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['result'] = 'Password was changed!'
+        representation['result'] = 'Password was changed successfully!'
         return representation
