@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',
     # my apps
     'users',
+    'user_profile',
     'storage_api',
     'reviews',
     # default apps
@@ -62,6 +63,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # one my middleware
+    'users.middlewares.CheckTokenMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -128,7 +131,8 @@ REST_FRAMEWORK = {
         'users.backends.JWTAuthentication',
     ),
 }
-JWT_EXPIRE = timedelta(days=30)
+JWT_EXPIRE = timedelta(days=15)
+# JWT_EXPIRE = timedelta(minutes=5)
 
 
 # development (NOT USE IN PROD)
@@ -139,13 +143,15 @@ CORS_ALLOW_ALL_ORIGINS = True
 #    "http://frontend:5050"
 # ]
 #
-# CORS_ALLOW_METHODS = (
-#    "DELETE",
-#    "GET",
-#    "OPTIONS",
-#    "PATCH",
-#    "POST",
-# )
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+)
 
 
 # Internationalization
