@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Folder(models.Model):
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         verbose_name=_('user id'),
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -68,7 +68,7 @@ class File(models.Model):
     folder = models.ForeignKey(
         verbose_name=_('parent folder id'),
         to='self',
-        on_delete=models.CASCADE,
+        on_delete=models.RESTRICT,
         null=True,
     )
     recycle_bin = models.BooleanField(

@@ -1,7 +1,6 @@
-import jwt
-
 from datetime import datetime
-from random import randint
+
+import jwt
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -19,20 +18,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=False,
         blank=False,
         db_index=True,
-    )
-    nickname = models.CharField(
-        verbose_name=_('nickname'),
-        max_length=30,
-        null=True,
-        blank=True,
-    )
-    photo = models.ImageField(
-        verbose_name=_('profile photo'),
-        max_length=255,
-        null=True,
-        blank=True,
-        default=settings.DEFAULT_PROFILE_PHOTO,
-        upload_to='profile_photos/',
     )
     created_at = models.DateTimeField(
         verbose_name=_('created at'),
@@ -74,23 +59,47 @@ class User(AbstractBaseUser, PermissionsMixin):
     def _generate_jwt_token(self):
         """Generate JWT-token with user id, expire in JWT_EXPIRE time"""
 
-        dt = datetime.now() + settings.JWT_EXPIRE
-
+        token_create_time = datetime.now()
+        token_expire_time = token_create_time + settings.JWT_EXPIRE
+        user_id = self.pk
         token = jwt.encode({
-            'id': self.pk,
-            'exp': int(dt.strftime('%s'))
+            'id': user_id,
+            'exp': int(token_expire_time.strftime('%s'))
         }, settings.SECRET_KEY, algorithm='HS256')
 
-        return token
+        new_token_obj = Token.objects.create(
+            user_id=user_id,
+            token=token,
+        )
 
-    def save(self, *args, **kwargs):
-        # устанавливаем дефолтный ник, если он не задан
-        if not self.nickname:
-            rand_num = randint(1, 999999)
-            self.nickname = _(f'User_{str(rand_num).rjust(6, "0")}')
+        try:
+            new_token_obj.save()
+            return token
+        except Exception as error:
+            raise error
 
-        # устанавливаем дефолтное фото, если оно было очищено
-        if not self.photo:
-            self.photo = settings.DEFAULT_PROFILE_PHOTO
 
-        super(User, self).save(*args, **kwargs)
+class Token(models.Model):
+    user = models.ForeignKey(
+        verbose_name=_('user id'),
+        to=User,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        db_index=True,
+    )
+    token = models.CharField(
+        verbose_name=_('token'),
+        max_length=255,
+        null=False,
+        blank=False,
+    )
+
+    # blacklisted = models.BooleanField(
+    #     verbose_name=_('blacklisted'),
+    #     default=False
+    # )
+
+    class Meta:
+        verbose_name = _('token')
+        verbose_name_plural = _('tokens')
