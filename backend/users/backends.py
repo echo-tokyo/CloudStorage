@@ -1,12 +1,15 @@
 import jwt
 
 from django.conf import settings
-from rest_framework import authentication, exceptions
+from rest_framework import authentication
 
+from .errors import UserAccessForbidden
 from .models import User
+from .service import delete_one_token
 
 
 class JWTAuthentication(authentication.BaseAuthentication):
+    # слово перед токеном в значении заголовка
     authentication_header_prefix = 'Bearer'
 
     def authenticate(self, request):
@@ -63,20 +66,21 @@ class JWTAuthentication(authentication.BaseAuthentication):
         """
 
         try:
+            # декодируем токен
             payload = jwt.decode(jwt=token, key=settings.SECRET_KEY, algorithms='HS256')
             # print([payload])
         except Exception:
-            msg = 'Authenticate error. Cannot decode the token! (Probably, token is expired)'
-            raise exceptions.AuthenticationFailed(msg)
+            # удаляем токен (скорее всего, он истёк)
+            delete_one_token(token=token)
+            raise UserAccessForbidden('Authenticate error. Cannot decode the token! (Probably, token is expired)')
 
+        # если юзер (указанный в токене) не найден
         try:
             user = User.objects.get(pk=payload['id'])
         except User.DoesNotExist:
-            msg = 'No user matching this token was found!'
-            raise exceptions.AuthenticationFailed(msg)
-
+            raise UserAccessForbidden('No user matching this token was found!')
+        # если юзер деактивирован
         if not user.is_active:
-            msg = 'This user is deactivated.'
-            raise exceptions.AuthenticationFailed(msg)
+            raise UserAccessForbidden('User is deactivated.')
 
         return user, token

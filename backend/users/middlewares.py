@@ -1,41 +1,52 @@
+from django.http import JsonResponse
+from rest_framework import status
+from rest_framework.request import Request
+
 from .models import Token
-
-
-class TokenNotInTable(Exception):
-    def __init__(self, message):
-        super().__init__(message)
+# from .errors import TokenNDoesNotExist
 
 
 class CheckTokenMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
-    def __call__(self, request):
+    def __call__(self, request: Request):
         # Code to be executed for each request before the view (and later middleware) are called.
 
-        # print('\nrequest', request)
-        # print(request.headers)
+        check_token_status = self.check_token(request=request)
 
+        if check_token_status:
+            response = self.get_response(request)
+            # Code to be executed for each request/response after the view is called.
+            return response
+        else:
+            return JsonResponse(
+                data={'errors': {'token': 'Invalid token. Token does not exist. Re-authorisation required'}},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+    def check_token(self, request: Request):
+        """Validate token"""
+
+        # достаём заголовок с токеном
         try:
             auth_header = request.headers['Authorization']
         except KeyError:
             # если нет заголовка Authorization, то пропускаем все действия ниже
-            return self.get_response(request)
+            return True
 
         header_token = auth_header.split(' ')[-1]
-        print([header_token])
+        # print([header_token])
 
         table_token = Token.objects.filter(token=header_token)
         # если токен не был найден в БД
         if not table_token:
-            raise TokenNotInTable('Sent token was not found in table')
+            return False
 
         # здесь находится QuerySet
-        print(table_token)
+        # print(table_token)
 
-        response = self.get_response(request)
-        # Code to be executed for each request/response after the view is called.
-        return response
+        return True
 
 
 # request <WSGIRequest: POST '/api/user/login/'>
