@@ -22,7 +22,7 @@ input[type="email"],[type="password"],[type="text"]{
     height: 70px;
     background-color: #B4B4B4;
     border-radius: 15px;
-    border: none;
+    border: 2px solid #ffffff00;
     font-size: 24px;
     text-indent: 30px;
 }
@@ -34,7 +34,7 @@ input[type="submit"]{
     height: 70px;
     background-color: #B4B4B4;
     border-radius: 15px;
-    border: none;
+    border: 2px solid #ffffff00;
     font-size: 24px;
     cursor: pointer;
 }
@@ -43,4 +43,7 @@ svg{
 }
 .file-item:hover{
     background: rgba(0, 0, 0, 0.10);
+}
+.error{
+    border: 2px solid red;
 }

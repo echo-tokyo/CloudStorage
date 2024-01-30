@@ -7,7 +7,7 @@ function Home(){
         {localStorage.getItem('registered') ? (
             <MainPage />
         ) : (
-            <HelloPage />
+                <HelloPage />
         )}
         </>
     )

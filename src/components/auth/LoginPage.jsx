@@ -2,29 +2,30 @@ import './auth.css'
 import { Link, useNavigate } from 'react-router-dom'
 import Themes from '../mainPage/Themes'
 import axios from 'axios'
+import { useState } from 'react'
 
 function Login () {
     const navigate = useNavigate()
+    const [dataCorrect, setDataCorrect] = useState(true)
 
     const handleClick = (e) => {
         e.preventDefault()
-        localStorage.setItem('registered', 'yes')
-
         const formData = {
             email: e.target.email.value,
             password: e.target.password.value
         }
-
+        
         axios.post('http://79.137.204.172/api/user/login/', formData, {headers: {'Content-Type': 'application/json'}})
 
         .then(response => {
-            const token = response.data.token
-            localStorage.setItem('token', token)
+            console.log(response.data)
+            localStorage.setItem('registered', 'yes')
             navigate('/')
         })
 
         .catch(error => {
             console.error('произошла ошибка при отправке запроса ', error.response.data)
+            setDataCorrect(false)
         })
     }
 
@@ -38,9 +39,12 @@ function Login () {
                 )}
             </Themes>
             <form action="" className="form-field" onSubmit={(e) => handleClick(e)}>
+                {dataCorrect == false && (
+                    <p className='dataNotCorrect'>Неверные введенные данные</p>
+                )}
                 <div className="inps">
-                    <input type="email" name='email' placeholder='Почта' />
-                    <input type="password" name='password' placeholder='Пароль' />
+                    <input type="email" name='email' placeholder='Почта' required/>
+                    <input type="password" name='password' placeholder='Пароль' required/>
                 </div>
                 <input type="submit" value="Войти"/>
             </form>

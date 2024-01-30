@@ -10,8 +10,6 @@ import Profile from './profile/profile'
 function MainPage(){
     const [files, setFile] = useState(filesData)
 
-    // функция парсинга данных с сервера, и их использование в состоянии для рендеринга (можно вынести в отдельный компонент)
-
     const [modal, setModal] = useState(false)
     const modalOpen = () => {
         setModal(!modal)
@@ -23,7 +21,6 @@ function MainPage(){
         setProfile(!profile)
         setModal(false)
     }
-    
     return(
         <Themes defaultTheme={false}>
             {(changeTheme) => (
