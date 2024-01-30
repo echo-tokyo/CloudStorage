@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
+from .errors import UserValidateError, UserAccessForbidden
 from .models import User
 
 
@@ -40,20 +41,20 @@ class UserLoginSerializer(serializers.ModelSerializer):
 
         # Вызвать исключение, если не предоставлена почта.
         if email is None:
-            raise serializers.ValidationError('An email address is required to log in.')
+            raise UserValidateError('An email address is required to log in.')
         # Вызвать исключение, если не предоставлен пароль.
         if password is None:
-            raise serializers.ValidationError('A password is required to log in.')
+            raise UserValidateError('A password is required to log in.')
 
         # проверка, что предоставленные почта и пароль соответствуют какому-то юзеру в БД
         user = authenticate(username=email, password=password)
 
         # если пользователь с данными почтой/паролем не найден
         if user is None:
-            raise serializers.ValidationError('A user with this email and password was not found.')
+            raise UserValidateError('A user with this email and password was not found.')
         # если юзер деактивирован или заблокирован.
         if not user.is_active:
-            raise serializers.ValidationError('This user has been deactivated.')
+            raise UserAccessForbidden('This user has been deactivated.')
 
         # возвращаем словарь проверенных данных
         return {
@@ -92,24 +93,24 @@ class ChangeUserPasswordSerializer(serializers.Serializer):
 
         # Вызвать исключение, если не предоставлен старый пароль.
         if old_password is None:
-            raise serializers.ValidationError('An old_password address is required to change password.')
+            raise UserValidateError('An old_password address is required to change password.')
         # Вызвать исключение, если не предоставлен новый пароль.
         if new_password is None:
-            raise serializers.ValidationError('A new_password is required to change password.')
+            raise UserValidateError('A new_password is required to change password.')
 
         email = self.context.get('user', None).email
         if email is None:
-            raise serializers.ValidationError('Cannot parse email to change password.')
+            raise UserValidateError('Cannot parse email to change password.')
 
         # проверка, что предоставленные почта и пароль соответствуют какому-то юзеру в БД
         user = authenticate(username=email, password=old_password)
 
         # если пользователь с данными почтой/паролем не найден
         if user is None:
-            raise serializers.ValidationError('A user with this email and password was not found.')
+            raise UserValidateError('A user with this email and password was not found.')
         # если юзер деактивирован или заблокирован.
         if not user.is_active:
-            raise serializers.ValidationError('This user has been deactivated.')
+            raise UserAccessForbidden('This user has been deactivated.')
 
         # возвращаем словарь проверенных данных
         return {

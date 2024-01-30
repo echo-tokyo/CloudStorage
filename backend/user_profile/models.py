@@ -53,10 +53,12 @@ class Profile(models.Model):
 
 @receiver(models.signals.post_save, sender=get_user_model())
 def create_user_profile(sender, instance, created, **kwargs):
+    """Create profile for user when user has been created"""
     if created:
         Profile.objects.create(user=instance)
 
 
 @receiver(models.signals.post_save, sender=get_user_model())
 def save_user_profile(sender, instance, **kwargs):
+    """Save profile for user when user has been created"""
     instance.profile.save()
