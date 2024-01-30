@@ -4,7 +4,7 @@ import { useState } from 'react'
 import ChangePassword from './changePassword/changePassword'
 import ChangeUserData from './changeUserData/ChangeUserData'
 
-function Profile () { 
+function Profile ({profilePhoto}) { 
     const [passChange, setPassChange] = useState(false)
 
     const sendProfileData = (e) => {
@@ -54,7 +54,7 @@ function Profile () {
         <div className="modal-profile">
             <div className="modal-item">
                 <p>Профиль</p>
-                <div className="avatar"></div>
+                <div className="avatar" style={{backgroundImage: `url('${profilePhoto}')`}}></div>
                 <input type="file" id="file-upload"/>
                 <label htmlFor="file-upload" className='download'>Загрузить фото</label>
                 <p className='subtitle'>JPG или PNG, мин 100 х 100 пикс, до 5 Mb</p>

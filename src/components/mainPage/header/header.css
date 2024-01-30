@@ -16,7 +16,6 @@ header>p{
     height: 60px;
     width: 60px;
     border-radius: 60px;
-    background-image: url(../../../../public/i.webp);
     background-size: cover;
     background-repeat: no-repeat;
     cursor: pointer;

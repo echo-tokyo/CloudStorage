@@ -1,4 +1,3 @@
-
 function ChangeUserData({sendProfileData, setPassChange}) {
     return(
         <form action="" className='modal-form' onSubmit={(e) => sendProfileData(e)}>

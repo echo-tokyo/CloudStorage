@@ -1,4 +1,3 @@
-
 function ChangePassword({setPassChange, sendNewPassword}) {
     return(
         <form action="" className='modal-form' onSubmit={(e) => sendNewPassword(e)}>

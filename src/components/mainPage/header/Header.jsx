@@ -1,11 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import './header.css'
 
-function Header({changeTheme, modalOpen, profileClick}) {
+function Header({changeTheme, modalOpen, profileClick, profilePhoto}) {
     const navigate = useNavigate()
-
     const logoutClick = () => {
-        // отправка запроса с токеном, чтобы его удалили
+        
         localStorage.removeItem('token')
         navigate('/login')
     }
@@ -18,7 +17,7 @@ function Header({changeTheme, modalOpen, profileClick}) {
     return( 
         <header>
             <div className="header_item2">
-                <div className="avatar" onClick={() => profileClick()}></div>
+                <div className="avatar" onClick={() => profileClick()} style={{backgroundImage: `url('${profilePhoto}')`}}></div>
                 <p onClick={() => logoutClick()}>Выйти</p>
             </div>
             <div className='header_item'>
