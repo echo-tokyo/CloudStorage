@@ -11,6 +11,7 @@ services:
     env_file:
       - .env
     volumes:
+      - "backend_files:/app/backend/media/files"
       - "backend_staticfiles:/app/backend/static"
     ports:
       - "8080:8080"
@@ -44,3 +45,4 @@ networks:
 
 volumes:
   backend_staticfiles:
+  backend_files:
