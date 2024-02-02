@@ -8,17 +8,23 @@ from django.utils.translation import gettext_lazy as _
 def user_files_dir_path(instance, filename):
     """return path to upload file to MEDIA_ROOT/files/user_<id>/<folder-id>_<datetime>"""
 
+    # папка, в которой находится файл
+    folder = instance.folder
+
     # получаем датавремя
     now_time = datetime.now()
     str_now_time = now_time.strftime('%Y_%m_%d_%H_%M_%S')
 
     if '.' in filename:
+        splitted_filename = filename.split(".")
+        # оставляем только название
+        file_name = splitted_filename[0]
         # достаём расширение файла
-        file_extension = filename.split(".")[-1]
+        file_extension = splitted_filename[-1]
         # меняем имя файла, заданное юзером, на имя с id папки и точной датой до секунд
-        return f'files/user_{instance.folder.user.id}/{instance.folder.pk}_{str_now_time}.{file_extension}'
+        return f'files/user_{folder.user.id}/{folder.pk}_{str_now_time}_{file_name[:10]}.{file_extension}'
 
-    return f'files/user_{instance.folder.user.id}/{instance.folder.pk}_{str_now_time}'
+    return f'files/user_{instance.folder.user.id}/{instance.folder.pk}_{str_now_time}_{filename[:10]}'
 
 
 class Folder(models.Model):

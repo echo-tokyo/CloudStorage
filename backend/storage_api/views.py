@@ -22,8 +22,15 @@ class UploadFileToServerAPIView(APIView):
 
         try:
             folder_id = int(data.get('folder_id'))
+
+            folder = Folder.objects.get(pk=folder_id)
+
+            if folder.user != request.user:
+                print('ERROR')
+                raise ValueError
+
         except (ValueError, TypeError):
-            raise FolderValueError('Invalid number of folder was given')
+            raise FolderValueError('Invalid folder id was given')
 
         try:
             file = data.get('file')
