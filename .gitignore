@@ -73,5 +73,8 @@ venv.bak/
 # My secure data
 /db_info/dumps
 
+# confidence user data
+backend/media/files/*
+
 # пока исключены все json-рендеры (созданы, но не используются)
 *renderers.py
