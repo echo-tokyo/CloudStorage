@@ -9,11 +9,15 @@ def core_exception_handler(exc, context):
     response = exception_handler(exc, context)
     # словарь с видом ошибки и её обработчиком
     handlers = {
+        # users
         'AuthenticationFailed': _handle_error,
         'ValidationError': _handle_invalid_data_validation_error,
         'TokenNDoesNotExist': _handle_my_error,
         'UserValidateError': _handle_my_error,
-        'UserAccessForbidden': _handle_my_error
+        'UserAccessForbidden': _handle_my_error,
+        # storage_api
+        'FolderValueError': _handle_my_error,
+        'FileNotGivenError': _handle_my_error,
     }
     # Определить тип текущего исключения. Мы воспользуемся этим сразу далее,
     # чтобы решить, делать ли это самостоятельно или отдать эту работу DRF.
@@ -41,7 +45,7 @@ def _handle_invalid_data_validation_error(exc, context, response):
 
     # получаем информацию об ошибке
     response_data = response.data
-    new_response_data = {'errors': {}}
+    new_response_data = {}
 
     # поля для проверки в запросе
     fields = ['email', 'password', 'old_password', 'new_password']
@@ -52,11 +56,14 @@ def _handle_invalid_data_validation_error(exc, context, response):
             for error in errors:
                 error_code = error.code
                 error_message = str(error)
-                new_response_data['errors'][f'{field} {error_code}'] = error_message
+                new_response_data[f'{field} {error_code}'] = error_message
 
     # если есть ошибки в переменной, то заменяем содержимое дефолтного ответа на неё
     if new_response_data:
         response.data = new_response_data
+    # если в теле ответа хоть что-то есть
+    if response.data:
+        response.data = {'errors': response.data}
 
     return response
 
