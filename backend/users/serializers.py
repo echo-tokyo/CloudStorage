@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from .errors import UserValidateError, UserAccessForbidden
+from storage_api.models import Folder
+from .errors import UserValidateError, UserAccessForbidden, ServerProcessError
 from .models import User
 
 
@@ -12,14 +13,21 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=128, min_length=8, write_only=True)
     # не может быть отправлен в запросе клиентской стороной
     token = serializers.CharField(max_length=255, read_only=True)
+    root_dir = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'token')
+        fields = ('email', 'password', 'token', 'root_dir')
 
     def create(self, validated_data):
         new_user = User.objects.create_user(**validated_data)
         return new_user
+
+    def to_representation(self, instance: User):
+        representation = super().to_representation(instance)
+        root_dir = instance.create_root_dir()
+        representation['root_dir'] = root_dir.id
+        return representation
 
 
 class UserLoginSerializer(serializers.ModelSerializer):
@@ -28,10 +36,11 @@ class UserLoginSerializer(serializers.ModelSerializer):
     email = serializers.CharField(max_length=255, write_only=True)
     password = serializers.CharField(max_length=128, min_length=8, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
+    root_dir = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'token')
+        fields = ('email', 'password', 'token', 'root_dir')
 
     def validate(self, data):
         """Checking the UserLoginSerializer for validity"""
@@ -56,9 +65,16 @@ class UserLoginSerializer(serializers.ModelSerializer):
         if not user.is_active:
             raise UserAccessForbidden('This user has been deactivated.')
 
+        try:
+            # получаем корневой каталог юзера
+            root_dir = Folder.objects.get(user=user)
+        except Exception:
+            raise ServerProcessError('User have not root directory')
+
         # возвращаем словарь проверенных данных
         return {
             'token': user.token,
+            'root_dir': root_dir.id,
         }
 
 

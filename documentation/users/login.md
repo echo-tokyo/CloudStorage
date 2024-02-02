@@ -28,15 +28,17 @@
 
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImV4cCI6MTcwOTA1OTk4OH0.xt2SZsi1CGMtdraR8ovC_6oA4hYIL16-MS3EJ6-3s6Q"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImV4cCI6MTcwOTA1OTk4OH0.xt2SZsi1CGMtdraR8ovC_6oA4hYIL16-MS3EJ6-3s6Q", 
+  "root_dir": 1
 }
 ```
 
 ### ** _Объяснение значений ответа:_
 
-| ключ     | что это такое   |
-|----------|-----------------|
-| token    | Токен для юзера |
+| ключ     | что это такое                |
+|----------|------------------------------|
+| token    | Токен для юзера              |
+| root_dir | Id корневой директории юзера |
 
 <hr>
 
