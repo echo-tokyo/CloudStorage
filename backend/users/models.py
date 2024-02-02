@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from storage_api.models import Folder
 from .managers import CustomUserManager
 
 
@@ -77,6 +78,12 @@ class User(AbstractBaseUser, PermissionsMixin):
             return token
         except Exception as error:
             raise error
+
+    def create_root_dir(self):
+        """Create root dir for user"""
+
+        new_folder = Folder.objects.create(user=self, name='/')
+        return new_folder
 
 
 class Token(models.Model):

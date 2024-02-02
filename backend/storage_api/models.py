@@ -1,6 +1,24 @@
+from datetime import datetime
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+
+def user_files_dir_path(instance, filename):
+    """return path to upload file to MEDIA_ROOT/files/user_<id>/<folder-id>_<datetime>"""
+
+    # получаем датавремя
+    now_time = datetime.now()
+    str_now_time = now_time.strftime('%Y_%m_%d_%H_%M_%S')
+
+    if '.' in filename:
+        # достаём расширение файла
+        file_extension = filename.split(".")[-1]
+        # меняем имя файла, заданное юзером, на имя с id папки и точной датой до секунд
+        return f'files/user_{instance.folder.user.id}/{instance.folder.pk}_{str_now_time}.{file_extension}'
+
+    return f'files/user_{instance.folder.user.id}/{instance.folder.pk}_{str_now_time}'
 
 
 class Folder(models.Model):
@@ -18,7 +36,7 @@ class Folder(models.Model):
         null=False,
         blank=False,
     )
-    parent_id = models.ForeignKey(
+    parent = models.ForeignKey(
         verbose_name=_('parent folder id'),
         to='self',
         on_delete=models.CASCADE,
@@ -40,7 +58,7 @@ class Folder(models.Model):
     )
     updated_at = models.DateTimeField(
         verbose_name=_('updated at'),
-        auto_now=True,
+        auto_now_add=True,
         null=False,
         blank=False,
     )
@@ -53,23 +71,21 @@ class File(models.Model):
         null=False,
         blank=False,
     )
-    size = models.CharField(
+    size = models.IntegerField(
         verbose_name=_('file size'),
-        max_length=20,
-        null=False,
-        blank=False,
     )
     path = models.FileField(
         verbose_name=_('path to file'),
-        upload_to='files/',
+        upload_to=user_files_dir_path,
         null=False,
         blank=False,
     )
     folder = models.ForeignKey(
         verbose_name=_('parent folder id'),
-        to='self',
-        on_delete=models.RESTRICT,
-        null=True,
+        to=Folder,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
     )
     recycle_bin = models.BooleanField(
         verbose_name=_('file in recycle bin'),
@@ -85,3 +101,7 @@ class File(models.Model):
         null=False,
         blank=False,
     )
+
+    @property
+    def datetime_str(self):
+        return str(self.created_at)[:16].replace('T', ' ')
