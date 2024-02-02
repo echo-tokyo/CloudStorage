@@ -15,6 +15,8 @@ from datetime import timedelta
 from dotenv import load_dotenv
 from pathlib import Path
 
+from corsheaders.defaults import default_headers as cors_default_headers
+
 
 # загрузка переменных окружения
 load_dotenv()
@@ -37,24 +39,25 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
 
 
 # Application definition
-
-INSTALLED_APPS = [
-    # installed apps
-    'rest_framework',
-    'corsheaders',
-    # my apps
-    'users',
-    'user_profile',
-    'storage_api',
-    'reviews',
-    # default apps
+DEFAULT_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
+)
+THIRD_PARTY_APPS = (
+    'rest_framework',
+    'corsheaders',
+)
+LOCAL_APPS = (
+    'users',
+    'user_profile',
+    'storage_api',
+)
+INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -131,8 +134,7 @@ REST_FRAMEWORK = {
         'users.backends.JWTAuthentication',
     ),
 }
-# JWT_EXPIRE = timedelta(days=15)
-JWT_EXPIRE = timedelta(minutes=20)
+JWT_EXPIRE = timedelta(days=15)
 
 
 # development (NOT USE IN PROD)
@@ -142,15 +144,16 @@ CORS_ALLOW_ALL_ORIGINS = True
 #    # real frontend host&port
 #    "http://frontend:5050"
 # ]
-#
-
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = (
-    "DELETE",
-    "GET",
+    # "DELETE",
     "OPTIONS",
-    "PATCH",
+    "GET",
     "POST",
+    "PUT",
+)
+CORS_ALLOW_HEADERS = (
+    *cors_default_headers,
 )
 
 
