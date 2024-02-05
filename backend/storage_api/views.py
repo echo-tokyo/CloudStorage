@@ -7,8 +7,21 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .errors import FolderValueError, FileNotGivenError
-from .serializers import UploadFileToServerSerializer, GetFileListSerializer
+from .serializers import (UploadFileToServerSerializer, GetFileListSerializer)
 from .models import Folder, File
+
+
+class GetRootDirAPIView(APIView):
+    """Get root dir for current user"""
+
+    def get(self, request: Request):
+        user = request.user
+
+        data = {
+            'root_dir': user.root_dir.id
+        }
+
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
 class UploadFileToServerAPIView(APIView):

@@ -11,11 +11,11 @@ class UploadFileToServerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = File
-        fields = '__all__'
-        read_only_fields = ('recycle_bin', 'star', 'created_at')
-        # extra_kwargs = {
-        #     'path': {'write_only': True},
-        # }
+        exclude = ('folder', 'recycle_bin')
+        read_only_fields = ('star', 'created_at')
+        extra_kwargs = {
+            'path': {'write_only': True},
+        }
 
     def create(self, validated_data):
         folder_id = validated_data.pop('folder_id')
@@ -37,7 +37,7 @@ class GetFileListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = File
-        exclude = ('folder', 'recycle_bin')
+        exclude = ('folder', 'recycle_bin', 'path')
 
     def to_representation(self, instance: File):
         representation = super().to_representation(instance)

@@ -28,19 +28,15 @@
 
 ```json
 {
-    "email": "test10@test.ru",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImV4cCI6MTcwOTA1ODE3OX0.-RIvAaZ7A75uV_RBGe9GGTq24rke-JzsDm7DnnaUWmA",
-    "root_dir": 1
 }
 ```
 
 ### ** _Объяснение значений ответа:_
 
-| ключ     | что это такое                              |
-|----------|--------------------------------------------|
-| email    | Почта только что зарегистрированного юзера |
-| token    | Токен для юзера                            |
-| root_dir | Id корневой директории юзера               |
+| ключ  | что это такое   |
+|-------|-----------------|
+| token | Токен для юзера |
 
 <hr>
 

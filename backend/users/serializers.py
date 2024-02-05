@@ -1,33 +1,34 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from storage_api.models import Folder
-from .errors import UserValidateError, UserAccessForbidden, ServerProcessError
-from .models import User
+# from storage_api.models import Folder
+from .errors import UserValidateError, UserAccessForbidden  # ServerProcessError
+from .models import User, Profile
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     """Serialization of new user registration"""
 
+    email = serializers.CharField(max_length=255, write_only=True)
     # не может быть прочитан клиентской стороной
     password = serializers.CharField(max_length=128, min_length=8, write_only=True)
     # не может быть отправлен в запросе клиентской стороной
     token = serializers.CharField(max_length=255, read_only=True)
-    root_dir = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'token', 'root_dir')
+        fields = ('email', 'password', 'token')
 
     def create(self, validated_data):
         new_user = User.objects.create_user(**validated_data)
+        new_user.create_root_dir()
         return new_user
 
-    def to_representation(self, instance: User):
-        representation = super().to_representation(instance)
-        root_dir = instance.create_root_dir()
-        representation['root_dir'] = root_dir.id
-        return representation
+    # def to_representation(self, instance: User):
+    #     representation = super().to_representation(instance)
+    #     root_dir = instance.create_root_dir()
+    #     representation['root_dir'] = root_dir.id
+    #     return representation
 
 
 class UserLoginSerializer(serializers.ModelSerializer):
@@ -36,11 +37,10 @@ class UserLoginSerializer(serializers.ModelSerializer):
     email = serializers.CharField(max_length=255, write_only=True)
     password = serializers.CharField(max_length=128, min_length=8, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
-    root_dir = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'token', 'root_dir')
+        fields = ('email', 'password', 'token')
 
     def validate(self, data):
         """Checking the UserLoginSerializer for validity"""
@@ -65,16 +65,15 @@ class UserLoginSerializer(serializers.ModelSerializer):
         if not user.is_active:
             raise UserAccessForbidden('This user has been deactivated.')
 
-        try:
-            # получаем корневой каталог юзера
-            root_dir = Folder.objects.get(user=user)
-        except Exception:
-            raise ServerProcessError('User have not root directory')
+        # try:
+        #     # получаем корневой каталог юзера
+        #     root_dir = Folder.objects.get(user=user)
+        # except Exception:
+        #     raise ServerProcessError('User have not root directory')
 
         # возвращаем словарь проверенных данных
         return {
             'token': user.token,
-            'root_dir': root_dir.id,
         }
 
 
@@ -97,15 +96,11 @@ class ChangeUserPasswordSerializer(serializers.Serializer):
 
     old_password = serializers.CharField(max_length=128, min_length=8, write_only=True)
     new_password = serializers.CharField(max_length=128, min_length=8, write_only=True)
-    email = serializers.CharField(max_length=255, read_only=True)
     result = serializers.CharField(read_only=True)
 
     def validate(self, data):
         old_password = data.get('old_password', None)
         new_password = data.get('new_password', None)
-
-        print('old_password', old_password)
-        print('new_password', new_password)
 
         # Вызвать исключение, если не предоставлен старый пароль.
         if old_password is None:
@@ -130,7 +125,6 @@ class ChangeUserPasswordSerializer(serializers.Serializer):
 
         # возвращаем словарь проверенных данных
         return {
-            'email': email,
             'new_password': new_password,
         }
 
@@ -147,4 +141,25 @@ class ChangeUserPasswordSerializer(serializers.Serializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['result'] = 'Password was changed successfully!'
+        return representation
+
+
+class GetUserProfileSerializer(serializers.ModelSerializer):
+    """serialization of getting user profile"""
+
+    photo_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Profile
+        fields = ('photo_url',)
+
+    def get_photo_url(self, instance: Profile):
+        """Get full url to profile photo"""
+
+        return instance.photo_url
+
+    def to_representation(self, instance: Profile):
+        representation = super().to_representation(instance)
+        # добавление email юзера к ответу
+        representation['email'] = instance.user.email
         return representation
