@@ -109,5 +109,5 @@ class File(models.Model):
     )
 
     @property
-    def datetime_str(self):
+    def create_datetime_str(self):
         return str(self.created_at)[:16].replace('T', ' ')
