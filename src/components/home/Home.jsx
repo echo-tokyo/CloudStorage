@@ -7,7 +7,7 @@ function Home(){
         {localStorage.getItem('token') ? (
             <MainPage />
         ) : (
-                <HelloPage />
+            <HelloPage />
         )}
         </>
     )

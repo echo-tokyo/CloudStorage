@@ -23,6 +23,8 @@ header>p{
 .header_item{
     display: flex;
     align-items: center;
+    flex-direction: row;
+    padding: 0;
     gap: 10px;
     cursor: pointer;
 }
