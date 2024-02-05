@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import './header.css'
 import axios from 'axios'
 
-function Header({changeTheme, modalOpen, profileClick, profilePhoto}) {
+function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFile}) {
     const navigate = useNavigate()
     const logoutClick = () => {
         const token = localStorage.getItem('token')
@@ -23,12 +23,14 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto}) {
         const file = e.target.files[0]
         const token = localStorage.getItem('token')
         const formData = new FormData()
+        formData.append('folder_id', localStorage.getItem('rootDir'))
+        formData.append('file', file)
 
-        formData.append('folder_id', 2)
-        formData.append('file', file)    
         axios.post('http://79.137.204.172/api/storage/upload-file-to-server/', formData, {headers: {'Authorization' : `Bearer ${token}`}})
         .then(response => {
-            console.log(response)
+            console.log(response.data)
+            const newFile = {id: response.data.id, name: response.data.name, size: response.data.size + ' байт'}
+            setFile(prevFiles => [...prevFiles, newFile])
         })
         .catch(error => {
             console.error('Произошла ошибка при отправке файла ', error)

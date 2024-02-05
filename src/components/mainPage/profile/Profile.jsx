@@ -4,18 +4,21 @@ import { useState } from 'react'
 import ChangePassword from './changePassword/changePassword'
 import ChangeUserData from './changeUserData/ChangeUserData'
 
-function Profile ({profilePhoto}) { 
+function Profile ({profilePhoto, profileEmail, setProfileEmail}) { 
     const [passChange, setPassChange] = useState(false)
 
     const sendProfileData = (e) => {
         e.preventDefault()
+
+        setProfileEmail(e.target.email.value)
+
         const token = localStorage.getItem('token')
 
         const profileData = {
             email: e.target.email.value,
         }
         
-        axios.put('http://79.137.204.172/api/user/edit/', profileData, {headers:{'Content-Type': 'application/json', "Authorization": `Bearer ${token}`}})
+        axios.put('http://79.137.204.172/api/user/edit-email/', profileData, {headers:{'Content-Type': 'application/json', "Authorization": `Bearer ${token}`}})
 
         .then((response) => {
             document.querySelector('.send').style = `border: 2px solid lightgreen`
@@ -60,9 +63,9 @@ function Profile ({profilePhoto}) {
                 <p className='subtitle'>JPG или PNG, мин 100 х 100 пикс, до 5 Mb</p>
             </div>
             {passChange == false ? (
-                <ChangeUserData setPassChange={setPassChange} sendProfileData={sendProfileData} />
+                <ChangeUserData setPassChange={setPassChange} sendProfileData={sendProfileData} profileEmail={profileEmail} />
                 ) : (
-                <ChangePassword setPassChange={setPassChange} sendNewPassword={sendNewPassword}/>
+                <ChangePassword setPassChange={setPassChange} sendNewPassword={sendNewPassword} />
             )}
         </div>
     )

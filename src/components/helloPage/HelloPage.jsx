@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 
 function HelloPage() {
     const history = useNavigate();
-
     useEffect(() => {
     const redirectTimer = setTimeout(() => {
       history('/login');
