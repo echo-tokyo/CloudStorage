@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import './header.css'
 import axios from 'axios'
 
-function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFile}) {
+function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFile, formatFileSize}) {
     const navigate = useNavigate()
     const logoutClick = () => {
         const token = localStorage.getItem('token')
@@ -18,29 +18,6 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFile}) {
         navigate('/login')
         localStorage.removeItem('token')
     }
-
-    const formatFileSize = (sizeInBytes) => {
-        let suffix = 'байт';
-
-        switch (true) {
-            case sizeInBytes < 1024:
-                suffix = 'байт';
-                break;
-            case sizeInBytes < 1024 * 1024:
-                sizeInBytes = (sizeInBytes / 1024).toFixed(0);
-                suffix = 'КБ';
-                break;
-            case sizeInBytes < 1024 * 1024 * 1024:
-                sizeInBytes = (sizeInBytes / (1024 * 1024)).toFixed(0);
-                suffix = 'МБ';
-                break;
-            default:
-                sizeInBytes = (sizeInBytes / (1024 * 1024 * 1024)).toFixed(0);
-                suffix = 'ГБ';
-        }
-
-        return sizeInBytes + ' ' + suffix;
-    };
 
     const filesPush = (e) => {
         const file = e.target.files[0]

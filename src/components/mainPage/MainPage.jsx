@@ -13,6 +13,29 @@ function MainPage(){
     const [profilePhoto, setProfilePhoto] = useState('')
     const [profileEmail, setProfileEmail] = useState('')
 
+    const formatFileSize = (sizeInBytes) => {
+        let suffix = 'байт';
+
+        switch (true) {
+            case sizeInBytes < 1024:
+                suffix = 'байт';
+                break;
+            case sizeInBytes < 1024 * 1024:
+                sizeInBytes = (sizeInBytes / 1024).toFixed(0);
+                suffix = 'КБ';
+                break;
+            case sizeInBytes < 1024 * 1024 * 1024:
+                sizeInBytes = (sizeInBytes / (1024 * 1024)).toFixed(0);
+                suffix = 'МБ';
+                break;
+            default:
+                sizeInBytes = (sizeInBytes / (1024 * 1024 * 1024)).toFixed(0);
+                suffix = 'ГБ';
+        }
+
+        return sizeInBytes + ' ' + suffix;
+    };
+
     useEffect(() => {
         const token = localStorage.getItem('token')
         axios.get('http://79.137.204.172/api/user/get-profile-info/', {headers: {'Authorization': `Bearer ${token}`}})
@@ -33,13 +56,16 @@ function MainPage(){
             console.error('Произошла ошибка при получении root-dir', error)
         })
 
-        axios.get('http://79.137.204.172/api/storage/get-file-list/', {
-            params: { folder_id: localStorage.getItem('rootDir') },
-            headers: {'Authorization': `Bearer ${token}`}
-        })
+        axios.post('http://79.137.204.172/api/storage/get-file-list/', {folder_id: Number(localStorage.getItem('rootDir'))}, {headers: {'Authorization': `Bearer ${token}`}})
         .then(response => {
-            setFile({id: response.data.id, name: response.data.name, size: response.data.size + ' байт'})
-            console.log(response.data)
+            const files = response.data.map(file => (
+                {
+                    id: file.id,
+                    name: file.name,
+                    size: formatFileSize(file.size)
+                }
+                ))
+            setFile(files)
         })
         .catch(error => {
             console.error('Произошла ошибка при получении данных', error)
@@ -61,7 +87,7 @@ function MainPage(){
         <Themes defaultTheme={false}>
             {(changeTheme) => (
                 <>
-                <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFile={setFile}/>
+                <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFile={setFile} formatFileSize={formatFileSize}/>
                 <main>
                     {modal && <Modal />}
                     {profile && <Profile profilePhoto={profilePhoto} profileEmail={profileEmail} setProfileEmail={setProfileEmail}/>}
