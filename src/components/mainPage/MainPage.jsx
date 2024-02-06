@@ -33,7 +33,10 @@ function MainPage(){
             console.error('Произошла ошибка при получении root-dir', error)
         })
 
-        axios.get('http://79.137.204.172/api/storage/get-file-list/', {folder_id: localStorage.getItem('rootDir')}, {headers: {'Authorization': `Bearer ${token}`}})
+        axios.get('http://79.137.204.172/api/storage/get-file-list/', {
+            params: { folder_id: localStorage.getItem('rootDir') },
+            headers: {'Authorization': `Bearer ${token}`}
+        })
         .then(response => {
             setFile({id: response.data.id, name: response.data.name, size: response.data.size + ' байт'})
             console.log(response.data)

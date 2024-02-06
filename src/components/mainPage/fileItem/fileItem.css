@@ -10,6 +10,7 @@
     border-radius: 5px;
     padding-left: 40px;
     padding-right: 40px;
+    margin-top: 5px;
 }
 .file-item_item{
     display: flex;

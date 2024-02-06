@@ -19,6 +19,29 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFile}) {
         localStorage.removeItem('token')
     }
 
+    const formatFileSize = (sizeInBytes) => {
+        let suffix = 'байт';
+
+        switch (true) {
+            case sizeInBytes < 1024:
+                suffix = 'байт';
+                break;
+            case sizeInBytes < 1024 * 1024:
+                sizeInBytes = (sizeInBytes / 1024).toFixed(0);
+                suffix = 'КБ';
+                break;
+            case sizeInBytes < 1024 * 1024 * 1024:
+                sizeInBytes = (sizeInBytes / (1024 * 1024)).toFixed(0);
+                suffix = 'МБ';
+                break;
+            default:
+                sizeInBytes = (sizeInBytes / (1024 * 1024 * 1024)).toFixed(0);
+                suffix = 'ГБ';
+        }
+
+        return sizeInBytes + ' ' + suffix;
+    };
+
     const filesPush = (e) => {
         const file = e.target.files[0]
         const token = localStorage.getItem('token')
@@ -29,7 +52,7 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFile}) {
         axios.post('http://79.137.204.172/api/storage/upload-file-to-server/', formData, {headers: {'Authorization' : `Bearer ${token}`}})
         .then(response => {
             console.log(response.data)
-            const newFile = {id: response.data.id, name: response.data.name, size: response.data.size + ' байт'}
+            const newFile = {id: response.data.id, name: response.data.name, size: formatFileSize(response.data.size)}
             setFile(prevFiles => [...prevFiles, newFile])
         })
         .catch(error => {
