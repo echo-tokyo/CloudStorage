@@ -2,7 +2,7 @@
 
 ### ** _URL:_ http://79.137.204.172/api/storage/get-file-list/
 
-### ** _Метод:_ GET
+### ** _Метод:_ POST
 
 <hr>
 

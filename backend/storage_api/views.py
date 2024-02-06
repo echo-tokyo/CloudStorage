@@ -1,5 +1,4 @@
 from rest_framework import status
-from rest_framework.generics import ListAPIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
@@ -67,7 +66,7 @@ class GetFileListAPIView(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = GetFileListSerializer
 
-    def get(self, request: Request):
+    def post(self, request: Request):
         try:
             folder_id = int(request.data.get('folder_id'))
             folder = Folder.objects.get(pk=folder_id)
