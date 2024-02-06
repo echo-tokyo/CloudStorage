@@ -17,12 +17,10 @@ def user_files_dir_path(instance, filename):
 
     if '.' in filename:
         splitted_filename = filename.split(".")
-        # оставляем только название
-        file_name = splitted_filename[0]
         # достаём расширение файла
         file_extension = splitted_filename[-1]
         # меняем имя файла, заданное юзером, на имя с id папки и точной датой до секунд
-        return f'files/user_{folder.user.id}/{folder.pk}_{str_now_time}_{file_name[:10]}.{file_extension}'
+        return f'files/user_{folder.user.id}/{folder.pk}_{str_now_time}.{file_extension}'
 
     return f'files/user_{instance.folder.user.id}/{instance.folder.pk}_{str_now_time}_{filename[:10]}'
 

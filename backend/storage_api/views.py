@@ -1,3 +1,6 @@
+from django.conf import settings
+from django.http import FileResponse
+
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
@@ -6,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .errors import FolderValueError, FileNotGivenError
-from .serializers import (UploadFileToServerSerializer, GetFileListSerializer)
+from .serializers import UploadFileToServerSerializer, DownloadFileFromServerSerializer, GetFileListSerializer
 from .models import Folder, File
 
 
@@ -62,6 +65,30 @@ class UploadFileToServerAPIView(APIView):
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
 
+class DownloadFileFromServerAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = DownloadFileFromServerSerializer
+
+    def post(self, request: Request):
+        # Добавление пользователя из запроса в контекст
+        self.serializer_class.context = {'user': request.user}
+
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # достаём из словаря path и name запрашиваемого файла
+        file_path = str(settings.BASE_DIR) + serializer.data.get('path')
+        file_name = serializer.data.get('name')
+
+        # отправляем файл
+        return FileResponse(
+            open(file_path, 'rb'),
+            as_attachment=True,
+            filename=file_name,
+            status=status.HTTP_200_OK,
+        )
+
+
 class GetFileListAPIView(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = GetFileListSerializer
@@ -81,25 +108,3 @@ class GetFileListAPIView(APIView):
         serializer = self.serializer_class(files_queryset, many=True)
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
-
-
-# class DownloadFileFromServerAPIView(APIView):
-#     permission_classes = (IsAuthenticated,)
-#     serializer_class = DownloadFileFromServerSerializer
-#
-#     def post(self, request: Request):
-#         # from django.http import FileResponse
-#         # response = FileResponse(open('myfile.png', 'rb'))
-#
-#         data = request.data
-#
-#         print('request.user', request.user)
-#         print('data', data)
-#
-#         serializer = self.serializer_class(data=data)
-#         serializer.is_valid(raise_exception=True)
-#
-#         print('serializer.data', serializer.data)
-#
-#         # return Response(data=serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(status=status.HTTP_201_CREATED)
