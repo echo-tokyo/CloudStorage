@@ -1,8 +1,8 @@
 from django.contrib.auth import authenticate
+from django.db.utils import IntegrityError
 from rest_framework import serializers
 
-# from storage_api.models import Folder
-from .errors import UserValidateError, UserAccessForbidden  # ServerProcessError
+from .errors import UserValidateError, UserAccessForbidden
 from .models import User, Profile
 
 
@@ -20,15 +20,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         fields = ('email', 'password', 'token')
 
     def create(self, validated_data):
-        new_user = User.objects.create_user(**validated_data)
-        new_user.create_root_dir()
-        return new_user
+        try:
+            new_user = User.objects.create_user(**validated_data)
+            new_user.create_root_dir()
+        except IntegrityError:
+            raise UserValidateError('Invalid email. User with such email already exist!')
 
-    # def to_representation(self, instance: User):
-    #     representation = super().to_representation(instance)
-    #     root_dir = instance.create_root_dir()
-    #     representation['root_dir'] = root_dir.id
-    #     return representation
+        return new_user
 
 
 class UserLoginSerializer(serializers.ModelSerializer):
@@ -64,12 +62,6 @@ class UserLoginSerializer(serializers.ModelSerializer):
         # если юзер деактивирован или заблокирован.
         if not user.is_active:
             raise UserAccessForbidden('This user has been deactivated.')
-
-        # try:
-        #     # получаем корневой каталог юзера
-        #     root_dir = Folder.objects.get(user=user)
-        # except Exception:
-        #     raise ServerProcessError('User have not root directory')
 
         # возвращаем словарь проверенных данных
         return {
