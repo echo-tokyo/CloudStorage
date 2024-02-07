@@ -1,10 +1,9 @@
 import './modal.css'
-import filesData from '../file.data'
 import FileItem from '../fileItem/FileItem'
 import { useState } from 'react'
 
 function Modal () {
-    const [files, setFile] = useState(filesData)
+    const [files, setFile] = useState([])
     const trashRemove = () => {
         setFile('')
     }

@@ -1,7 +1,6 @@
 import './mainPage.css'
 import Header from './header/Header'
 import FileItem from './fileItem/FileItem'
-import filesData from './file.data'
 import {useEffect, useState } from 'react'
 import Themes from './Themes'
 import Modal from './modal/Modal'
@@ -9,7 +8,7 @@ import Profile from './profile/profile'
 import axios from 'axios'
 
 function MainPage(){
-    const [files, setFile] = useState(filesData)
+    const [files, setFile] = useState([])
     const [profilePhoto, setProfilePhoto] = useState('')
     const [profileEmail, setProfileEmail] = useState('')
 
