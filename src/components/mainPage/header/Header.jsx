@@ -17,6 +17,7 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFile, fo
         
         navigate('/login')
         localStorage.removeItem('token')
+        localStorage.removeItem('rootDir')
     }
 
     const filesPush = (e) => {
@@ -28,7 +29,6 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFile, fo
 
         axios.post('http://79.137.204.172/api/storage/upload-file-to-server/', formData, {headers: {'Authorization' : `Bearer ${token}`}})
         .then(response => {
-            console.log(response.data)
             const newFile = {id: response.data.id, name: response.data.name, size: formatFileSize(response.data.size)}
             setFile(prevFiles => [...prevFiles, newFile])
         })

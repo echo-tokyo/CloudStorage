@@ -21,55 +21,58 @@ function MainPage(){
                 suffix = 'байт';
                 break;
             case sizeInBytes < 1024 * 1024:
-                sizeInBytes = (sizeInBytes / 1024).toFixed(0);
+                sizeInBytes = (sizeInBytes / 1024).toFixed(1);
                 suffix = 'КБ';
                 break;
             case sizeInBytes < 1024 * 1024 * 1024:
-                sizeInBytes = (sizeInBytes / (1024 * 1024)).toFixed(0);
+                sizeInBytes = (sizeInBytes / (1024 * 1024)).toFixed(1);
                 suffix = 'МБ';
                 break;
             default:
-                sizeInBytes = (sizeInBytes / (1024 * 1024 * 1024)).toFixed(0);
+                sizeInBytes = (sizeInBytes / (1024 * 1024 * 1024)).toFixed(1);
                 suffix = 'ГБ';
         }
 
         return sizeInBytes + ' ' + suffix;
     };
 
-    useEffect(() => {
-        const token = localStorage.getItem('token')
-        axios.get('http://79.137.204.172/api/user/get-profile-info/', {headers: {'Authorization': `Bearer ${token}`}})
-        .then(response => {
-            setProfilePhoto(response.data.photo_url)
-            setProfileEmail(response.data.email)
-        })
-        .catch((error) => {
-            setProfilePhoto('../../../../public/i.webp')
-            console.error('Произошла ошибка при получении данных профиля ', error)
-        })
-
-        axios.get('http://79.137.204.172/api/storage/get-root-dir/', {headers: {'Authorization': `Bearer ${token}`}})
-        .then(response => {
-            localStorage.setItem('rootDir', response.data.root_dir)
-        })
-        .catch(error => {
-            console.error('Произошла ошибка при получении root-dir', error)
-        })
-
-        axios.post('http://79.137.204.172/api/storage/get-file-list/', {folder_id: Number(localStorage.getItem('rootDir'))}, {headers: {'Authorization': `Bearer ${token}`}})
-        .then(response => {
-            const files = response.data.map(file => (
-                {
-                    id: file.id,
-                    name: file.name,
-                    size: formatFileSize(file.size)
-                }
-                ))
-            setFile(files)
-        })
-        .catch(error => {
-            console.error('Произошла ошибка при получении данных', error)
-        })
+    useEffect( () => {
+        const fetchData = async () => {
+            const token = localStorage.getItem('token')
+            await axios.get('http://79.137.204.172/api/user/get-profile-info/', {headers: {'Authorization': `Bearer ${token}`}})
+            .then(response => {
+                setProfilePhoto(response.data.photo_url)
+                setProfileEmail(response.data.email)
+            })
+            .catch((error) => {
+                setProfilePhoto('../../../../public/i.webp')
+                console.error('Произошла ошибка при получении данных профиля ', error)
+            })
+    
+            await axios.get('http://79.137.204.172/api/storage/get-root-dir/', {headers: {'Authorization': `Bearer ${token}`}})
+            .then(response => {
+                localStorage.setItem('rootDir', response.data.root_dir)
+            })
+            .catch(error => {
+                console.error('Произошла ошибка при получении root-dir', error)
+            })
+    
+            await axios.post('http://79.137.204.172/api/storage/get-file-list/', {folder_id: Number(localStorage.getItem('rootDir'))}, {headers: {'Authorization': `Bearer ${token}`}})
+            .then(response => {
+                const files = response.data.map(file => (
+                    {
+                        id: file.id,
+                        name: file.name,
+                        size: formatFileSize(file.size)
+                    }
+                    ))
+                setFile(files)
+            })
+            .catch(error => {
+                console.error('Произошла ошибка при получении данных', error)
+            })
+        }
+        fetchData()
     }, [])
     
     const [modal, setModal] = useState(false)
