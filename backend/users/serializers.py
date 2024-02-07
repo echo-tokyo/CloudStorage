@@ -155,3 +155,27 @@ class GetUserProfileSerializer(serializers.ModelSerializer):
         # добавление email юзера к ответу
         representation['email'] = instance.user.email
         return representation
+
+
+class EditUserProfileSerializer(serializers.ModelSerializer):
+    """Serialization of changing user profile"""
+    photo_url = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Profile
+        fields = ("photo", "photo_url")
+        extra_kwargs = {
+            'photo': {'write_only': True},
+        }
+
+    def get_photo_url(self, instance: Profile):
+        """Get full url to profile photo"""
+
+        return instance.photo_url
+
+    def update(self, instance: Profile, validated_data):
+        # обновление фото
+        instance.photo = validated_data.get('photo', instance.photo)
+        instance.save()
+
+        return instance

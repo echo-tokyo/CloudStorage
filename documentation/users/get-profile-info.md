@@ -26,17 +26,17 @@
 
 ```json
 {
-    "photo": "http://79.137.204.172/static/profile_photos/default_user_profile_photo.png"
+    "photo_url": "http://79.137.204.172/static/profile_photos/default_user_profile_photo.png"
     "email": "test1@test.ru"
 }
 ```
 
 ### ** _Объяснение значений ответа:_
 
-| ключ  | что это такое               |
-|-------|-----------------------------|
-| photo | Фото профиля юзера (ссылка) |
-| email | Почта юзера                 |
+| ключ      | что это такое               |
+|-----------|-----------------------------|
+| photo_url | Фото профиля юзера (ссылка) |
+| email     | Почта юзера                 |
 
 <hr>
 

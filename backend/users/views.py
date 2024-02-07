@@ -1,14 +1,17 @@
 from django.http import JsonResponse
 
 from rest_framework import status
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.views import APIView
 
+from .errors import UserValidateError
+from storage_api.errors import FileNotGivenError
 from .serializers import (UserRegistrationSerializer, UserLoginSerializer,
                           EditUserSerializer, ChangeUserPasswordSerializer,
-                          GetUserProfileSerializer)
+                          GetUserProfileSerializer, EditUserProfileSerializer)
 from .service import delete_tokens_when_change_passwd, delete_one_token
 from .models import Profile
 
@@ -122,4 +125,26 @@ class GetUserProfileAPIView(APIView):
 
 class EditUserProfileAPIView(APIView):
     """Edit user's profile info (photo)"""
-    ...
+
+    parser_classes = (MultiPartParser,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = EditUserProfileSerializer
+
+    def put(self, request: Request):
+        try:
+            # достаём из запроса фото
+            photo = request.data.get('photo')
+        except Exception:
+            raise FileNotGivenError('Profile photo to upload not given')
+
+        try:
+            # получаем профиль юзера по его id
+            user_profile = Profile.objects.get(user_id=request.user.id)
+        except Exception:
+            raise UserValidateError("Cannot parse user's profile to change photo.")
+
+        serializer = self.serializer_class(data={"photo": photo}, instance=user_profile)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
