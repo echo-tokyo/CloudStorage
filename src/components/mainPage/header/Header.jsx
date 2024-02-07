@@ -8,16 +8,14 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFile, fo
         const token = localStorage.getItem('token')
 
         axios.post('http://79.137.204.172/api/user/logout/', token, {headers: {'Authorization': `Bearer ${token}`}})
-        .then(response => {
-            console.log(response.data)
+        .then(() => {
+            navigate('/login')
+            localStorage.removeItem('token')
+            localStorage.removeItem('rootDir')
         })
         .catch(error => {
             console.error('Произошла ошибка при выходе ', error)
         })
-        
-        navigate('/login')
-        localStorage.removeItem('token')
-        localStorage.removeItem('rootDir')
     }
 
     const filesPush = (e) => {
