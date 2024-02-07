@@ -93,7 +93,7 @@ function MainPage(){
                 <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFile={setFile} formatFileSize={formatFileSize}/>
                 <main>
                     {modal && <Modal />}
-                    {profile && <Profile profilePhoto={profilePhoto} profileEmail={profileEmail} setProfileEmail={setProfileEmail}/>}
+                    {profile && <Profile profilePhoto={profilePhoto} profileEmail={profileEmail} setProfileEmail={setProfileEmail} setProfilePhoto={setProfilePhoto}/>}
                     {files.length ? (
                         files.map(file => <FileItem key={file.id} file={file} setFile={setFile} />)
                     ) : (
