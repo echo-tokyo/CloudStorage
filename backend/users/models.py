@@ -164,7 +164,7 @@ class Profile(models.Model):
     @property
     def photo_url(self):
         if self.photo and hasattr(self.photo, 'url'):
-            return f'http://{settings.IP_OR_DNS_SERVER}/static/{self.photo}'
+            return f'http://{settings.IP_OR_DNS_SERVER}{self.photo.url}'
 
     def save(self, *args, **kwargs):
         # # устанавливаем дефолтный ник, если он не задан
@@ -205,4 +205,7 @@ def post_save_handler(instance: Profile, **kwargs):
     # если прошлое фото не было дефолтным, то физически удаляем его
     if previous_photo_path and str(previous_photo_path) != settings.DEFAULT_PROFILE_PHOTO:
         full_photo_path = str(settings.BASE_DIR) + previous_photo_path.url
-        remove_file(full_photo_path)
+        try:
+            remove_file(full_photo_path)
+        except FileNotFoundError:
+            pass

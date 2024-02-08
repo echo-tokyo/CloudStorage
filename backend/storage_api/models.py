@@ -109,8 +109,3 @@ class File(models.Model):
     @property
     def create_datetime_str(self):
         return str(self.created_at)[:16].replace('T', ' ')
-
-    @property
-    def file_url(self):
-        if self.path:
-            return f'http://{settings.IP_OR_DNS_SERVER}/static/{self.path}'
