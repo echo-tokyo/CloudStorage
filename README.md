@@ -1,6 +1,6 @@
 # Cloud Storage
 
 #### Status of deployment:
-[![Backend-CD](https://github.com/echo-tokyo/CloudStorage/actions/workflows/backend_deploy.yml/badge.svg?branch=backend)](https://github.com/echo-tokyo/CloudStorage/actions/workflows/backend_deploy.yml)
+[![Test-Frontend-CD](https://github.com/echo-tokyo/CloudStorage/actions/workflows/frontend_deploy.yml/badge.svg)](https://github.com/echo-tokyo/CloudStorage/actions/workflows/frontend_deploy.yml)
 
 <hr>
