@@ -2,7 +2,8 @@ name: Backend-CD
 
 on:
   push:
-    branches: [ "backend" ]
+    #    branches: [ "backend" ]
+    branches: [ "undefined_branch" ]
 
 jobs:
   checkout-repo:
