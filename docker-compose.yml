@@ -26,7 +26,7 @@ services:
     container_name: cloud_storage_frontend
     restart: always
     ports:
-      - "5050:5050"
+      - "5173:5173"
     networks:
       proj_network:
         ipv4_address: 172.16.1.4
