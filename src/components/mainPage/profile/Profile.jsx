@@ -16,9 +16,8 @@ function Profile ({profilePhoto, profileEmail, setProfileEmail, setProfilePhoto}
         }
         
         axios.put('http://79.137.204.172/api/user/edit-email/', profileData, {headers:{'Content-Type': 'application/json', "Authorization": `Bearer ${token}`}})
-        .then((response) => {
+        .then(() => {
             document.querySelector('.send').style = `border: 2px solid lightgreen`
-            console.log(response.data)
         })
         .catch((error) => {
             document.querySelector('.send').style = `border: 2px solid red`
