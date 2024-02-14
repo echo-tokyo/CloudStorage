@@ -37,3 +37,24 @@
     padding-top: 10px;
     color: green;
 }
+
+@media (max-width: 510px){
+    .form-field{
+        width: 350px;
+        height: 400px;
+        gap: 80px;
+    }
+    input[type="email"],[type="password"],[type="text"], [type="submit"]{
+        width: 300px;
+    }
+}
+@media (max-width: 490px){
+    .form-field{
+        width: 320px;
+        height: 400px;
+        gap: 80px;
+    }
+    input[type="email"],[type="password"],[type="text"], [type="submit"]{
+        width: 280px;
+    }
+}

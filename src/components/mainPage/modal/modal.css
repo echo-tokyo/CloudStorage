@@ -35,3 +35,24 @@
     cursor: pointer;
     color: #353535;
 }
+
+@media (max-width: 720px) {
+    .modal-window{
+        width: 550px;
+    }
+}
+@media (max-width: 600px) {
+    .modal-window{
+        width: 450px;
+    }
+}
+@media (max-width: 480px){
+    .modal-window{
+        width: 350px;
+    }
+}
+@media (max-width: 380px){
+    .modal-window{
+        width: 250px;
+    }
+}
