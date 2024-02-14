@@ -21,7 +21,7 @@ function Reg () {
             navigate('/')
         })
         .catch(error => {
-            console.error('Произошла ошибка при регистрации, ', error.response.data)
+            console.error('Произошла ошибка при регистрации, ', error)
             setDataCorrect(false)
         })
     }

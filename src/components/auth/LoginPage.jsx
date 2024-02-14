@@ -21,7 +21,7 @@ function Login () {
             navigate('/')
         })
         .catch(error => {
-            console.error('Произошла ошибка при входе ', error.response.data)
+            console.error('Произошла ошибка при входе ', error)
             setDataCorrect(false)
         })
     }
