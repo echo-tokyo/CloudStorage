@@ -47,3 +47,34 @@
     width: 210px;
     background-color: #a2a2a2;
 }
+@media (max-width: 1000px) {
+    .modal-profile{
+        height: 500px;
+    }
+}
+@media (max-width: 720px) {
+    .modal-profile{
+        width: 550px;
+    }
+}
+@media (max-width: 600px) {
+    .modal-profile{
+        width: 450px;
+    }
+    .modal-form input[type="text"], .modal-form input[type="email"], .modal-form input[type="password"]{
+        width: 300px;
+    }
+}
+@media (max-width: 480px){
+    .modal-profile{
+        width: 350px;
+    }
+    .modal-form input[type="text"], .modal-form input[type="email"], .modal-form input[type="password"]{
+        width: 200px;
+    }
+}
+@media (max-width: 380px){
+    .modal-profile{
+        width: 250px;
+    }
+}

@@ -17,7 +17,7 @@ h1{
 svg, path{
     user-select: none;
 }
-input[type="email"],[type="password"],[type="text"]{
+input[type="email"],[type="password"],[type="text"], [type="submit"]{
     width: 407px;
     height: 70px;
     background-color: #B4B4B4;
@@ -30,12 +30,6 @@ input::placeholder{
     color: black;
 }
 input[type="submit"]{
-    width: 407px;
-    height: 70px;
-    background-color: #B4B4B4;
-    border-radius: 15px;
-    border: 2px solid #ffffff00;
-    font-size: 24px;
     cursor: pointer;
 }
 svg{
@@ -50,7 +44,11 @@ svg{
 .pLink{
     cursor: pointer;
 }
-
+@media (max-width: 470px){
+	h1{
+        font-size: 60px;
+    }
+}
 @media (max-width: 400px){
 	html, body{
         font-size: 16px;
