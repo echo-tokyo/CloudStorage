@@ -41,7 +41,7 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFile, fo
             <form className='header_item' onChange={(e) => filesPush(e)}>
                 <input type="file" id="file-upload"/>
                 <label htmlFor="file-upload" className='download'>Файлы</label>
-                <label htmlFor="file-upload">
+                <label htmlFor="file-upload" className='label'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
                         <path className='theme1' d="M18.75 15H15M15 15H11.25M15 15V11.25M15 15V18.75M21.25 26.25H8.75C5.98857 26.25 3.75 24.0114 3.75 21.25V8.75C3.75 5.98857 5.98857 3.75 8.75 3.75H21.25C24.0114 3.75 26.25 5.98857 26.25 8.75V21.25C26.25 24.0114 24.0114 26.25 21.25 26.25Z" stroke="black" strokeWidth="2" strokeLinecap="round"/>
                     </svg>

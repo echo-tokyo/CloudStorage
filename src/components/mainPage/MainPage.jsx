@@ -4,7 +4,7 @@ import FileItem from './fileItem/FileItem'
 import {useEffect, useState } from 'react'
 import Themes from './Themes'
 import Modal from './modal/Modal'
-import Profile from './profile/profile'
+import Profile from './profile/Profile'
 import axios from 'axios'
 
 function MainPage(){
