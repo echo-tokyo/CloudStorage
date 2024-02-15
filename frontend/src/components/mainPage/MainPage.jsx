@@ -8,7 +8,7 @@ import Profile from './profile/Profile'
 import axios from 'axios'
 
 function MainPage(){
-    const [files, setFile] = useState([])
+    const [files, setFile] = useState()
     const [profilePhoto, setProfilePhoto] = useState('')
     const [profileEmail, setProfileEmail] = useState('')
 
