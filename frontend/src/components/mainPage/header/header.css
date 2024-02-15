@@ -28,6 +28,10 @@ header>p{
     gap: 10px;
     cursor: pointer;
 }
+svg, .label{
+    display: flex;
+    align-items: center;
+}
 .header_item2 p{
     cursor: pointer;
 }
@@ -39,16 +43,11 @@ header>p{
 .download{
     cursor: pointer;
 }
-
 @media (max-width: 670px){
 	header{
 		padding-left: 20px;
         padding-right: 20px;
 	}
-    svg, .label{
-        width: 20px;
-        height: 20px;
-    }
     .avatar{
         width: 40px;
         height: 40px;
