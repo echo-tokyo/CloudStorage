@@ -1,0 +1,12 @@
+/.idea
+
+.env
+
+/db_info
+/documentation
+
+/backend/DockerfileBackend
+/nginx/DockerfileNginx
+
+/.github
+/.git
