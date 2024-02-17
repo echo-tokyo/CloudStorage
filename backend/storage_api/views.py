@@ -8,8 +8,10 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .errors import FolderValueError, FileNotGivenError
-from .serializers import UploadFileToServerSerializer, DownloadFileFromServerSerializer, GetFileListSerializer
+from users.errors import UserValidateError, UserAccessForbidden
+from .errors import FolderValueError, FileNotGivenError, GetFileError
+from .serializers import (UploadFileToServerSerializer, DownloadFileFromServerSerializer, GetFileListSerializer,
+                          GetTrashSerializer, MoveToTrashSerializer, MoveFromTrashSerializer)
 from .models import Folder, File
 
 
@@ -57,6 +59,9 @@ class UploadFileToServerAPIView(APIView):
             "size": file.size,
             "folder_id": folder_id
         }
+
+        # Добавление пользователя из запроса в контекст
+        self.serializer_class.context = {'user': request.user}
 
         serializer = self.serializer_class(data=file_data)
         serializer.is_valid(raise_exception=True)
@@ -108,3 +113,72 @@ class GetFileListAPIView(APIView):
         serializer = self.serializer_class(files_queryset, many=True)
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class GetTrashAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = GetTrashSerializer
+
+    def post(self, request: Request):
+        user = request.user
+
+        files_queryset = File.objects.filter(recycle_bin=1, user=user)
+        serializer = self.serializer_class(files_queryset, many=True)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class MoveToTrashAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = MoveToTrashSerializer
+
+    def put(self, request: Request):
+        # получение юзера из запроса
+        user = request.user
+        if user is None:
+            raise UserValidateError('Cannot parse user from request.')
+
+        try:
+            # достаём id файла из запроса
+            file_id = request.data.get('id', None)
+            # получение объекта файла
+            file_obj = File.objects.get(id=file_id)
+        except File.DoesNotExist:
+            raise GetFileError('Cannot get file. Invalid file id was given.')
+
+        if file_obj.user != user:
+            raise UserAccessForbidden('User have no permissions to move this file to recycle bin!')
+
+        serializer = self.serializer_class(data=request.data, instance=file_obj)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(status=status.HTTP_200_OK)
+
+
+class MoveFromTrashAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = MoveFromTrashSerializer
+
+    def put(self, request: Request):
+        # получение юзера из запроса
+        user = request.user
+        if user is None:
+            raise UserValidateError('Cannot parse user from request.')
+
+        try:
+            # достаём id файла из запроса
+            file_id = request.data.get('id', None)
+            # получение объекта файла
+            file_obj = File.objects.get(id=file_id)
+        except File.DoesNotExist:
+            raise GetFileError('Cannot get file. Invalid file id was given.')
+
+        if file_obj.user != user:
+            raise UserAccessForbidden('User have no permissions to move this file to recycle bin!')
+
+        serializer = self.serializer_class(data=request.data, instance=file_obj)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(status=status.HTTP_200_OK)
