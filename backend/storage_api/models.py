@@ -69,6 +69,13 @@ class Folder(models.Model):
 
 
 class File(models.Model):
+    user = models.ForeignKey(
+        verbose_name=_('user id'),
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+    )
     name = models.CharField(
         verbose_name=_('file name'),
         max_length=50,
