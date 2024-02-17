@@ -4,7 +4,11 @@ import axios from 'axios'
 function FileItem({file, setFile}) {
     const handleRemove = () => {
         setFile(prev => prev.filter((el) => el.id !== file.id))
-        // TODO: при клике на крестик локально очищается массив полученных данных с сервера и ассинхронно шлется запрос на их удаление с сервера
+        const token = localStorage.getItem('token')
+        axios.put('http://79.137.204.172/api/storage/move-to-trash/', {"id": file.id}, {headers: {"Authorization": `Bearer ${token}`}})
+        .catch(error => {
+            console.error('Произошла ошибка при удалении файла ', error)
+        })
     }
     const fileDownload = () => {
         const token = localStorage.getItem('token')

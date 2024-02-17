@@ -8,10 +8,11 @@ import Profile from './profile/Profile'
 import axios from 'axios'
 
 function MainPage(){
+    const token = localStorage.getItem('token')
     const [files, setFile] = useState([])
     const [profilePhoto, setProfilePhoto] = useState('')
     const [profileEmail, setProfileEmail] = useState('')
-
+    
     const formatFileSize = (sizeInBytes) => {
         let suffix = 'байт';
 
@@ -37,7 +38,6 @@ function MainPage(){
 
     useEffect( () => {
         const fetchData = async () => {
-            const token = localStorage.getItem('token')
             await axios.get('http://79.137.204.172/api/user/get-profile-info/', {headers: {'Authorization': `Bearer ${token}`}})
             .then(response => {
                 setProfilePhoto(response.data.photo_url)
@@ -75,9 +75,17 @@ function MainPage(){
     }, [])
     
     const [modal, setModal] = useState(false)
+    const [trashFiles, setTrashFiles] = useState([])
     const modalOpen = () => {
         setModal(!modal)
         setProfile(false)
+        axios.post('http://79.137.204.172/api/storage/get-trash/', null, {headers: {"Authorization": `Bearer ${token}`}})
+        .then(response => {
+            setTrashFiles(response.data)
+        })
+        .catch(error => {
+            console.error('Произошла ошибка при получении удаленных файлов ', error)
+        })
     }
 
     const [profile, setProfile] = useState(false)
@@ -91,7 +99,7 @@ function MainPage(){
                 <>
                 <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFile={setFile} formatFileSize={formatFileSize}/>
                 <main>
-                    {modal && <Modal />}
+                    {modal && <Modal trashFiles={trashFiles} setTrashFiles={setTrashFiles} />}
                     {profile && <Profile profilePhoto={profilePhoto} profileEmail={profileEmail} setProfileEmail={setProfileEmail} setProfilePhoto={setProfilePhoto}/>}
                     {files.length ? (
                         files.map(file => <FileItem key={file.id} file={file} setFile={setFile} />)
