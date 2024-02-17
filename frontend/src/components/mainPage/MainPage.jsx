@@ -9,7 +9,7 @@ import axios from 'axios'
 
 function MainPage(){
     const token = localStorage.getItem('token')
-    const [files, setFile] = useState([])
+    const [files, setFiles] = useState([])
     const [profilePhoto, setProfilePhoto] = useState('')
     const [profileEmail, setProfileEmail] = useState('')
     
@@ -65,7 +65,7 @@ function MainPage(){
                         size: formatFileSize(file.size)
                     }
                     ))
-                setFile(files)
+                setFiles(files)
             })
             .catch(error => {
                 console.error('Произошла ошибка при получении данных', error)
@@ -81,7 +81,14 @@ function MainPage(){
         setProfile(false)
         axios.post('http://79.137.204.172/api/storage/get-trash/', null, {headers: {"Authorization": `Bearer ${token}`}})
         .then(response => {
-            setTrashFiles(response.data)
+            const files = response.data.map(file => (
+                {
+                    id: file.id,
+                    name: file.name,
+                    size: formatFileSize(file.size)
+                }
+                ))
+            setTrashFiles(files)
         })
         .catch(error => {
             console.error('Произошла ошибка при получении удаленных файлов ', error)
@@ -97,12 +104,12 @@ function MainPage(){
         <Themes defaultTheme={false}>
             {(changeTheme) => (
                 <>
-                <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFile={setFile} formatFileSize={formatFileSize}/>
+                <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFile={setFiles} formatFileSize={formatFileSize}/>
                 <main>
                     {modal && <Modal trashFiles={trashFiles} setTrashFiles={setTrashFiles} />}
                     {profile && <Profile profilePhoto={profilePhoto} profileEmail={profileEmail} setProfileEmail={setProfileEmail} setProfilePhoto={setProfilePhoto}/>}
                     {files.length ? (
-                        files.map(file => <FileItem key={file.id} file={file} setFile={setFile} />)
+                        files.map(file => <FileItem key={file.id} file={file} setFiles={setFiles} />)
                     ) : (
                         <p>There are no files</p>
                     )}

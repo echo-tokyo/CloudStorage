@@ -1,5 +1,5 @@
 import './modal.css'
-import FileItem from '../fileItem/FileItem'
+import ModalFile from './modalFile/ModalFile'
 
 function Modal ({trashFiles, setTrashFiles}) {
     const trashRemove = () => {
@@ -14,7 +14,7 @@ function Modal ({trashFiles, setTrashFiles}) {
             </div>
             <div className="files">
                 {trashFiles.length ? (
-                    trashFiles.map(file => <FileItem key={file.id} file={file} setFile={setTrashFiles}/>)
+                    trashFiles.map(file => <ModalFile key={file.id} file={file} setTrashFiles={setTrashFiles}/>)
                         ) : (
                     <p>There are no files</p>
                 )}

@@ -1,9 +1,9 @@
 import './fileItem.css'
 import axios from 'axios'
 
-function FileItem({file, setFile}) {
+function FileItem({file, setFiles}) {
     const handleRemove = () => {
-        setFile(prev => prev.filter((el) => el.id !== file.id))
+        setFiles(prev => prev.filter((el) => el.id !== file.id))
         const token = localStorage.getItem('token')
         axios.put('http://79.137.204.172/api/storage/move-to-trash/', {"id": file.id}, {headers: {"Authorization": `Bearer ${token}`}})
         .catch(error => {
