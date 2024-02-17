@@ -104,12 +104,12 @@ function MainPage(){
         <Themes defaultTheme={false}>
             {(changeTheme) => (
                 <>
-                <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFile={setFiles} formatFileSize={formatFileSize}/>
+                <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFile={setFiles} />
                 <main>
-                    {modal && <Modal trashFiles={trashFiles} setTrashFiles={setTrashFiles} />}
+                    {modal && <Modal trashFiles={trashFiles} setTrashFiles={setTrashFiles} setFiles={setFiles} formatFileSize={formatFileSize}/>}
                     {profile && <Profile profilePhoto={profilePhoto} profileEmail={profileEmail} setProfileEmail={setProfileEmail} setProfilePhoto={setProfilePhoto}/>}
                     {files.length ? (
-                        files.map(file => <FileItem key={file.id} file={file} setFiles={setFiles} />)
+                        files.map(file => <FileItem key={file.id} file={file} setFiles={setFiles} setTrashFiles={setTrashFiles}/>)
                     ) : (
                         <p>There are no files</p>
                     )}

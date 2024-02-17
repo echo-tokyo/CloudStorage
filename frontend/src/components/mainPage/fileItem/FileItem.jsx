@@ -1,11 +1,15 @@
 import './fileItem.css'
 import axios from 'axios'
 
-function FileItem({file, setFiles}) {
+function FileItem({file, setFiles, setTrashFiles}) {
     const handleRemove = () => {
         setFiles(prev => prev.filter((el) => el.id !== file.id))
         const token = localStorage.getItem('token')
         axios.put('http://79.137.204.172/api/storage/move-to-trash/', {"id": file.id}, {headers: {"Authorization": `Bearer ${token}`}})
+        .then(() => {
+            const newFile = {id: file.id, name: file.name, size: file.size}
+            setTrashFiles(prevFiles => [...prevFiles, newFile])
+        })
         .catch(error => {
             console.error('Произошла ошибка при удалении файла ', error)
         })
