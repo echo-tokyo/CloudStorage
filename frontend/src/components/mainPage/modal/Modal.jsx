@@ -1,11 +1,9 @@
 import './modal.css'
-import FileItem from '../fileItem/FileItem'
-import { useState } from 'react'
+import ModalFile from './modalFile/ModalFile'
 
-function Modal () {
-    const [files, setFile] = useState([])
+function Modal ({trashFiles, setTrashFiles, setFiles}) {
     const trashRemove = () => {
-        setFile('')
+        setTrashFiles('')
     }
     
     return(
@@ -15,8 +13,8 @@ function Modal () {
                 <p className='subtitle' onClick={()=> trashRemove()}>Очистить</p>
             </div>
             <div className="files">
-                {files.length ? (
-                    files.map(file => <FileItem key={file.id} file={file} setFile={setFile}/>)
+                {trashFiles.length ? (
+                    trashFiles.map(file => <ModalFile key={file.id} file={file} setTrashFiles={setTrashFiles} setFiles={setFiles}/>)
                         ) : (
                     <p>There are no files</p>
                 )}

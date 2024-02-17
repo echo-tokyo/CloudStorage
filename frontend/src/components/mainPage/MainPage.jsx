@@ -8,10 +8,10 @@ import Profile from './profile/Profile'
 import axios from 'axios'
 
 function MainPage(){
-    const [files, setFile] = useState([])
+    const [files, setFiles] = useState([])
     const [profilePhoto, setProfilePhoto] = useState('')
     const [profileEmail, setProfileEmail] = useState('')
-
+    
     const formatFileSize = (sizeInBytes) => {
         let suffix = 'байт';
 
@@ -36,8 +36,8 @@ function MainPage(){
     };
 
     useEffect( () => {
+        const token = localStorage.getItem('token')
         const fetchData = async () => {
-            const token = localStorage.getItem('token')
             await axios.get('http://79.137.204.172/api/user/get-profile-info/', {headers: {'Authorization': `Bearer ${token}`}})
             .then(response => {
                 setProfilePhoto(response.data.photo_url)
@@ -65,7 +65,7 @@ function MainPage(){
                         size: formatFileSize(file.size)
                     }
                     ))
-                setFile(files)
+                setFiles(files)
             })
             .catch(error => {
                 console.error('Произошла ошибка при получении данных', error)
@@ -75,9 +75,25 @@ function MainPage(){
     }, [])
     
     const [modal, setModal] = useState(false)
+    const [trashFiles, setTrashFiles] = useState([])
     const modalOpen = () => {
+        const token = localStorage.getItem('token')
         setModal(!modal)
         setProfile(false)
+        axios.post('http://79.137.204.172/api/storage/get-trash/', null, {headers: {"Authorization": `Bearer ${token}`}})
+        .then(response => {
+            const files = response.data.map(file => (
+                {
+                    id: file.id,
+                    name: file.name,
+                    size: formatFileSize(file.size)
+                }
+                ))
+            setTrashFiles(files)
+        })
+        .catch(error => {
+            console.error('Произошла ошибка при получении удаленных файлов ', error)
+        })
     }
 
     const [profile, setProfile] = useState(false)
@@ -89,12 +105,12 @@ function MainPage(){
         <Themes defaultTheme={false}>
             {(changeTheme) => (
                 <>
-                <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFile={setFile} formatFileSize={formatFileSize}/>
+                <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFile={setFiles} />
                 <main>
-                    {modal && <Modal />}
+                    {modal && <Modal trashFiles={trashFiles} setTrashFiles={setTrashFiles} setFiles={setFiles} formatFileSize={formatFileSize}/>}
                     {profile && <Profile profilePhoto={profilePhoto} profileEmail={profileEmail} setProfileEmail={setProfileEmail} setProfilePhoto={setProfilePhoto}/>}
                     {files.length ? (
-                        files.map(file => <FileItem key={file.id} file={file} setFile={setFile} />)
+                        files.map(file => <FileItem key={file.id} file={file} setFiles={setFiles} setTrashFiles={setTrashFiles}/>)
                     ) : (
                         <p>There are no files</p>
                     )}

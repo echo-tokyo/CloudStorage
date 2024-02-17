@@ -1,4 +1,4 @@
-.file-item{
+.modalFile-item{
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -11,27 +11,26 @@
     padding-right: 40px;
     margin-top: 5px;
 }
-.file-item_item{
+.modalFile-item_item{
     display: flex;
     align-items: center;
     gap: 30px;
 }
-.file-item_item2{
+.modalFile-item_item2{
     display: flex;
-    align-items: center;
     gap: 10px;
 }
-.file-item p {
+.modalFile-item p {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.file-item>p{
+.modalFile-item>p{
     padding-right: 20px;
 }
 
 @media (max-width: 670px) {
-    .file-item{
+    .modalFile-item{
         padding-left: 10px;
         padding-right: 10px;
         margin-right: 20px;

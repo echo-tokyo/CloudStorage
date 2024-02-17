@@ -42,8 +42,8 @@ function Profile ({profilePhoto, profileEmail, setProfileEmail, setProfilePhoto}
             document.querySelector('.send').style = `border: 2px solid red`
             console.error('Произошла ошибка при смене пароля ', error) 
         })
-    }   
-
+    }
+    
     const photoUpload = (e) => {
         const token = localStorage.getItem('token')
         const file = e.target.files[0]
