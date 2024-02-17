@@ -24,10 +24,9 @@ input[type="email"],[type="password"],[type="text"], [type="submit"]{
     border-radius: 15px;
     border: 2px solid #ffffff00;
     font-size: 24px;
-    text-indent: 30px;
 }
-input::placeholder{
-    color: black;
+input[type="email"],[type="password"],[type="text"]{
+    text-indent: 30px;
 }
 input[type="submit"]{
     cursor: pointer;
