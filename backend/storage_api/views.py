@@ -9,7 +9,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .errors import FolderValueError, FileNotGivenError
-from .serializers import UploadFileToServerSerializer, DownloadFileFromServerSerializer, GetFileListSerializer
+from .serializers import (UploadFileToServerSerializer, DownloadFileFromServerSerializer, GetFileListSerializer,
+                          GetTrashSerializer)
 from .models import Folder, File
 
 
@@ -57,6 +58,9 @@ class UploadFileToServerAPIView(APIView):
             "size": file.size,
             "folder_id": folder_id
         }
+
+        # Добавление пользователя из запроса в контекст
+        self.serializer_class.context = {'user': request.user}
 
         serializer = self.serializer_class(data=file_data)
         serializer.is_valid(raise_exception=True)
@@ -108,3 +112,25 @@ class GetFileListAPIView(APIView):
         serializer = self.serializer_class(files_queryset, many=True)
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class GetTrashAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = GetTrashSerializer
+
+    def post(self, request: Request):
+        user = request.user
+
+        files_queryset = File.objects.filter(recycle_bin=1, user=user)
+        serializer = self.serializer_class(files_queryset, many=True)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class MoveToTrashAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    # serializer_class = MoveToTrashSerializer
+
+    def post(self, request: Request):
+        ...

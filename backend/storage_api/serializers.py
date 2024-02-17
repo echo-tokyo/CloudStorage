@@ -13,17 +13,22 @@ class UploadFileToServerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = File
-        exclude = ('folder', 'recycle_bin')
+        exclude = ('user', 'folder', 'recycle_bin')
         read_only_fields = ('star', 'created_at')
         extra_kwargs = {
             'path': {'write_only': True},
         }
 
     def create(self, validated_data):
+        # получение юзера из контекста
+        user = self.context.get('user', None)
+        if user is None:
+            raise UserValidateError('Cannot parse user from request.')
+
         folder_id = validated_data.pop('folder_id')
         folder = Folder.objects.get(pk=folder_id)
 
-        new_file = File.objects.create(folder=folder, **validated_data)
+        new_file = File.objects.create(folder=folder, user=user, **validated_data)
         return new_file
 
     def to_representation(self, instance: File):
@@ -85,3 +90,11 @@ class GetFileListSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['created_at'] = instance.create_datetime_str
         return representation
+
+
+class GetTrashSerializer(serializers.ModelSerializer):
+    """Serialization of file list from recycle bin"""
+
+    class Meta:
+        model = File
+        exclude = ('folder', 'recycle_bin', 'path', 'user')
