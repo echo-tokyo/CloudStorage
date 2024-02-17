@@ -98,3 +98,33 @@ class GetTrashSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
         exclude = ('folder', 'recycle_bin', 'path', 'user')
+
+
+class MoveToTrashSerializer(serializers.ModelSerializer):
+    """Serialization of moving file to recycle bin"""
+
+    class Meta:
+        model = File
+        fields = ('id',)
+
+    def update(self, instance: File, validated_data):
+        # перемещение файла в корзину
+        instance.recycle_bin = 1
+        instance.save()
+
+        return instance
+
+
+class MoveFromTrashSerializer(serializers.ModelSerializer):
+    """Serialization of moving file from recycle bin"""
+
+    class Meta:
+        model = File
+        fields = ('id',)
+
+    def update(self, instance: File, validated_data):
+        # перемещение файла из корзины
+        instance.recycle_bin = 0
+        instance.save()
+
+        return instance

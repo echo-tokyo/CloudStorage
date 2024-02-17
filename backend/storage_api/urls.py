@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import (GetRootDirAPIView, GetFileListAPIView,
                     UploadFileToServerAPIView, DownloadFileFromServerAPIView,
-                    GetTrashAPIView, MoveToTrashAPIView)
+                    GetTrashAPIView, MoveToTrashAPIView, MoveFromTrashAPIView)
 
 
 urlpatterns = [
@@ -14,6 +14,6 @@ urlpatterns = [
 
     path('get-trash/', GetTrashAPIView.as_view()),
     path('move-to-trash/', MoveToTrashAPIView.as_view()),
-    # path('move-from-trash/', DownloadFileFromServerAPIView.as_view()),
+    path('move-from-trash/', MoveFromTrashAPIView.as_view()),
     # path('delete-file/', DownloadFileFromServerAPIView.as_view()),
 ]
