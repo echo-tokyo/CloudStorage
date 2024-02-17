@@ -1,4 +1,5 @@
 from datetime import datetime
+from os import remove as remove_file
 
 from django.conf import settings
 from django.db import models
@@ -116,3 +117,14 @@ class File(models.Model):
     @property
     def create_datetime_str(self):
         return str(self.created_at)[:16].replace('T', ' ')
+
+    def delete(self, *args, **kwargs):
+        full_file_path = f'{settings.BASE_DIR}/media/{self.path}'
+
+        try:
+            remove_file(full_file_path)
+        except FileNotFoundError:
+            pass
+
+        # Вызов оригинального метода delete()
+        super(File, self).delete(*args, **kwargs)

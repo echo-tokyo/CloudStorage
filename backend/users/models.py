@@ -1,5 +1,5 @@
 from datetime import datetime
-from os import listdir, remove as remove_file
+from os import remove as remove_file
 
 import jwt
 
