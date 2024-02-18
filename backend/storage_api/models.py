@@ -1,8 +1,11 @@
 from datetime import datetime
+from os.path import exists as file_exist
 from os import remove as remove_file
 
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 
@@ -68,6 +71,14 @@ class Folder(models.Model):
         blank=False,
     )
 
+    @property
+    def str_created_at(self):
+        return str(self.created_at)[:16].replace('T', ' ')
+
+    @property
+    def str_updated_at(self):
+        return str(self.created_at)[:16].replace('T', ' ')
+
 
 class File(models.Model):
     user = models.ForeignKey(
@@ -128,3 +139,20 @@ class File(models.Model):
 
         # Вызов оригинального метода delete()
         super(File, self).delete(*args, **kwargs)
+
+
+# Функция для удаления связанных файлов перед удалением папки
+@receiver(pre_delete, sender=Folder)
+def delete_related_files(sender, instance, **kwargs):
+    related_files = File.objects.filter(folder=instance)
+
+    for file in related_files:
+        # получение пути файла
+        full_file_path = f'{settings.BASE_DIR}/media/{file.path}'
+
+        # Удаление физического файла
+        if file_exist(full_file_path):
+            remove_file(full_file_path)
+
+        # Удаление записи о файле из базы данных
+        file.delete()

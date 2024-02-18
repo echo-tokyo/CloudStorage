@@ -28,3 +28,9 @@ class GetFileError(APIException):
     default_code = 'get_file_error'
 
 
+class GetFolderError(APIException):
+    """Ошибка при нахождении папки: неверные данные о папке в теле запроса"""
+
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = _('Folder error')
+    default_code = 'get_folder_error'

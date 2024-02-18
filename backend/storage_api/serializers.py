@@ -80,11 +80,9 @@ class DownloadFileFromServerSerializer(serializers.ModelSerializer):
 class GetFileListSerializer(serializers.ModelSerializer):
     """Serialization of file list of definite folder"""
 
-    folder_id = serializers.IntegerField(write_only=True)
-
     class Meta:
         model = File
-        exclude = ('folder', 'recycle_bin', 'path')
+        exclude = ('folder', 'recycle_bin', 'path', 'user')
 
     def to_representation(self, instance: File):
         representation = super().to_representation(instance)
@@ -92,15 +90,21 @@ class GetFileListSerializer(serializers.ModelSerializer):
         return representation
 
 
-class GetTrashSerializer(serializers.ModelSerializer):
-    """Serialization of file list from recycle bin"""
+class GetFolderListSerializer(serializers.ModelSerializer):
+    """Serialization of folder list of definite folder"""
 
     class Meta:
-        model = File
-        exclude = ('folder', 'recycle_bin', 'path', 'user')
+        model = Folder
+        exclude = ('parent', 'recycle_bin', 'user')
+
+    def to_representation(self, instance: Folder):
+        representation = super().to_representation(instance)
+        representation['created_at'] = instance.str_created_at
+        representation['updated_at'] = instance.str_updated_at
+        return representation
 
 
-class MoveToTrashSerializer(serializers.ModelSerializer):
+class MoveFileToTrashSerializer(serializers.ModelSerializer):
     """Serialization of moving file to recycle bin"""
 
     class Meta:
@@ -115,7 +119,7 @@ class MoveToTrashSerializer(serializers.ModelSerializer):
         return instance
 
 
-class MoveFromTrashSerializer(serializers.ModelSerializer):
+class MoveFileFromTrashSerializer(serializers.ModelSerializer):
     """Serialization of moving file from recycle bin"""
 
     class Meta:
@@ -128,3 +132,81 @@ class MoveFromTrashSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class MoveFolderToTrashSerializer(serializers.ModelSerializer):
+    """Serialization of moving folder to recycle bin"""
+
+    class Meta:
+        model = Folder
+        fields = ('id',)
+
+    def update(self, instance: Folder, validated_data):
+        # перемещение папки в корзину
+        instance.recycle_bin = 1
+        instance.save()
+
+        return instance
+
+
+class MoveFolderFromTrashSerializer(serializers.ModelSerializer):
+    """Serialization of moving folder to recycle bin"""
+
+    class Meta:
+        model = Folder
+        fields = ('id',)
+
+    def update(self, instance: Folder, validated_data):
+        # перемещение папки из корзины
+        instance.recycle_bin = 0
+        instance.save()
+
+        return instance
+
+
+class CreateFolderSerializer(serializers.ModelSerializer):
+    """Serialization of creating new folder"""
+
+    class Meta:
+        model = Folder
+        exclude = ('user', 'recycle_bin')
+        read_only_fields = ('star', 'created_at', 'updated_at')
+        extra_kwargs = {
+            'parent': {'write_only': True},
+        }
+
+    def create(self, validated_data):
+        # получение юзера из контекста
+        user = self.context.get('user', None)
+        if user is None:
+            raise UserValidateError('Cannot parse user from request.')
+
+        new_file = Folder.objects.create(user=user, **validated_data)
+        return new_file
+
+    def to_representation(self, instance: Folder):
+        representation = super().to_representation(instance)
+        representation['created_at'] = instance.str_created_at
+        representation['updated_at'] = instance.str_updated_at
+        return representation
+
+
+class RenameFolderSerializer(serializers.ModelSerializer):
+    """Serialization of creating new folder"""
+
+    class Meta:
+        model = Folder
+        exclude = ('user', 'recycle_bin', 'parent')
+        read_only_fields = ('star', 'created_at', 'updated_at')
+
+    def update(self, instance: Folder, validated_data):
+        instance.name = validated_data.get('name')
+        instance.save()
+
+        return instance
+
+    def to_representation(self, instance: Folder):
+        representation = super().to_representation(instance)
+        representation['created_at'] = instance.str_created_at
+        representation['updated_at'] = instance.str_updated_at
+        return representation
