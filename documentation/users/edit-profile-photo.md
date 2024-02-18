@@ -13,7 +13,6 @@
 ```jshint
 {
     formData.append('photo', file);
-
 }
 ```
 
