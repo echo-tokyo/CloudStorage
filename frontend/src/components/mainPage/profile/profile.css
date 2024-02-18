@@ -28,6 +28,7 @@
 }
 .modal-item > .avatar, .modal-item > .subtitle{
     cursor: default;
+    text-align: center;
 }
 #photo-upload{
     display: none;
@@ -39,17 +40,17 @@
     gap: 10px;
     padding-bottom: 20px;
 }
-.modal-form input[type="text"], .modal-form input[type="email"], .modal-form input[type="password"]{
+.modal-form input[type="text"], .modal-form input[type="email"], .modal-form input[type="password"], .modal-form [type="submit"]{
     width: 450px;
     background-color: #a2a2a2;
+    padding: 0;
 }
-.modal-form input[type="submit"]{
-    width: 210px;
-    background-color: #a2a2a2;
+.pLink{
+    text-decoration: underline;
 }
 @media (max-width: 1000px) {
     .modal-profile{
-        height: 500px;
+        height: 550px;
     }
 }
 @media (max-width: 720px) {
@@ -61,7 +62,7 @@
     .modal-profile{
         width: 450px;
     }
-    .modal-form input[type="text"], .modal-form input[type="email"], .modal-form input[type="password"]{
+    .modal-form input[type="text"], .modal-form input[type="email"], .modal-form input[type="password"], .modal-form input[type="submit"]{
         width: 300px;
     }
 }
@@ -69,7 +70,7 @@
     .modal-profile{
         width: 350px;
     }
-    .modal-form input[type="text"], .modal-form input[type="email"], .modal-form input[type="password"]{
+    .modal-form input[type="text"], .modal-form input[type="email"], .modal-form input[type="password"], .modal-form input[type="submit"]{
         width: 200px;
     }
 }
