@@ -37,7 +37,10 @@ function Themes({ defaultTheme, children }) {
         color: ${props => (props.isClicked ? 'white' : 'black')};
     }
     input::placeholder{
-        color: ${props => (props.isClicked && 'white')};
+        color: ${props => (props.isClicked ? '#8E8E8E' : '#5C5C5C')};
+    }
+    .modal-form input[type="text"]::placeholder, .modal-form input[type="email"]::placeholder, .modal-form input[type="password"]::placeholder{
+        color: ${props => (props.isClicked ? 'rgb(190, 189, 189)' : 'rgb(62, 61, 61)')};
     }
     input[type="submit"]{
         background-color: ${props => (props.isClicked && '#484848')};
