@@ -18,7 +18,7 @@ function Modal ({trashFiles, setTrashFiles, setFiles, setTrashFolders, trashFold
                     trashFiles.map(file => <ModalFile key={file.id} file={file} setTrashFiles={setTrashFiles} setFiles={setFiles}/>)
                 )}
                 {trashFolders.length > 0 && (
-                    trashFolders.map(folder => <ModalFolder key={folder.id} folder={folder} setTrashFolders={setTrashFiles} setFolders={setFolders} trashFolders={trashFolders}/>)
+                    trashFolders.map(folder => <ModalFolder key={folder.id} folder={folder} setTrashFolders={setTrashFolders} setFolders={setFolders} trashFolders={trashFolders}/>)
                 )}
             </div>
         </div>

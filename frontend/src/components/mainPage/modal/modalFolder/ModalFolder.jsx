@@ -1,7 +1,7 @@
 import axios from 'axios'
 import '../modalFile/modalFile.css'
 
-function ModalFolder({folder, setTrashFolders, setFolders}) {
+function ModalFolder({folder, setFolders, setTrashFolders}) {
     const token = localStorage.getItem('token')
     const folderRemove = () => {
         setTrashFolders(prev => prev.filter((el) => el.id !== folder.id))

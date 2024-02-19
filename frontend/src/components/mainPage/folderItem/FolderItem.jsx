@@ -8,7 +8,7 @@ const FolderItem = ({folder, getFolderData, setFolders, setTrashFolders}) => {
         axios.put('http://79.137.204.172/api/storage/move-folder-to-trash/', {"id": folder.id}, {headers: {"Authorization": `Bearer ${token}`}})
         .then(() => {
             const newFolder = {id: folder.id, name: folder.name}
-            setTrashFolders(prevFiles => [...prevFiles, newFolder])
+            setTrashFolders(prevFolders => [...prevFolders, newFolder])
         })
         .catch(error => {
             console.error('Произошла ошибка при удалении файла ', error)

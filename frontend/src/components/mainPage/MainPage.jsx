@@ -6,7 +6,7 @@ import Themes from './Themes'
 import Modal from './modal/Modal'
 import Profile from './profile/Profile'
 import axios from 'axios'
-import FolderItem from '../folder/folderItem/FolderItem'
+import FolderItem from './folderItem/FolderItem'
 
 function MainPage(){
     const token = localStorage.getItem('token')
