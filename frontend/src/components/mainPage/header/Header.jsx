@@ -2,11 +2,11 @@ import { useNavigate } from 'react-router-dom'
 import './header.css'
 import axios from 'axios'
 
-function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFiles, formatFileSize}) {
+function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFiles, formatFileSize, setFolders, activeFolder}) {
+    const token = localStorage.getItem('token')
     const navigate = useNavigate()
     const logoutClick = () => {
-        const token = localStorage.getItem('token')
-
+        
         axios.post('http://79.137.204.172/api/user/logout/', token, {headers: {'Authorization': `Bearer ${token}`}})
         .catch(error => {
             console.error('Произошла ошибка при выходе ', error)
@@ -18,7 +18,6 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFiles, f
     
     const filesPush = (e) => {
         const file = e.target.files[0]
-        const token = localStorage.getItem('token')
         const formData = new FormData()
         formData.append('folder_id', localStorage.getItem('rootDir'))
         formData.append('file', file)
@@ -30,6 +29,14 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFiles, f
         })
         .catch(error => {
             console.error('Произошла ошибка при отправке файла ', error)
+        })
+    }
+    console.log(activeFolder)
+    const createFolder = () => {
+        axios.post('http://79.137.204.172/api/storage/create-folder/', {parent: activeFolder, name: 'test'}, {headers: {'Authorization' : `Bearer ${token}`}})
+        .then(response => {
+            const newFolder = {id: response.data.id, name: response.data.name}
+            setFolders(prevFolders => [...prevFolders, newFolder])
         })
     }
     return( 
@@ -54,6 +61,7 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFiles, f
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none" onClick={() => changeTheme()}>
                     <path className='theme3' d="M15 27.5C21.9036 27.5 27.5 21.9036 27.5 15C27.5 8.09644 21.9036 2.5 15 2.5C8.09644 2.5 2.5 8.09644 2.5 15C2.5 21.9036 8.09644 27.5 15 27.5ZM15 25V5C20.5228 5 25 9.47715 25 15C25 20.5228 20.5228 25 15 25Z" fill="black" />
                 </svg>
+                <p onClick={() => createFolder()}>Создать папку</p>
             </div>
         </header>
     )
