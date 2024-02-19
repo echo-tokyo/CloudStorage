@@ -19,7 +19,7 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFiles, f
     const filesPush = (e) => {
         const file = e.target.files[0]
         const formData = new FormData()
-        formData.append('folder_id', localStorage.getItem('rootDir'))
+        formData.append('folder_id', activeFolder)
         formData.append('file', file)
 
         axios.post('http://79.137.204.172/api/storage/upload-file-to-server/', formData, {headers: {'Authorization' : `Bearer ${token}`}})
