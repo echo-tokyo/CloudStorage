@@ -123,15 +123,15 @@ function MainPage(){
                     name: file.name,
                     size: formatFileSize(file.size)
                 }
-                ))
-            const folders = response.data.folders.map(file => (
+            ))
+            const folders = response.data.folders.map(folder => (
                 {
-                    id: file.id,
-                    name: file.name,
+                    id: folder.id,
+                    name: folder.name,
                 }
-                ))
-            setTrashFolders(folders)
+            ))
             setTrashFiles(files)
+            setTrashFolders(folders)
         })
         .catch(error => {
             console.error('Произошла ошибка при получении удаленных файлов ', error)
@@ -150,6 +150,9 @@ function MainPage(){
                 <>
                 <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFiles={setFiles} setFolders={setFolders} folders={folders} activeFolder={activeFolder} formatFileSize={formatFileSize}/>
                 <main>
+                    {activeFolder !== localStorage.getItem('rootDir') && (
+                        <p>Назад</p>
+                    )}
                     {modal && <Modal trashFiles={trashFiles} setTrashFiles={setTrashFiles} setFiles={setFiles} formatFileSize={formatFileSize} trashFolders={trashFolders} setTrashFolders={setTrashFolders} setFolders={setFolders}/>}
                     {profile && <Profile profilePhoto={profilePhoto} profileEmail={profileEmail} setProfileEmail={setProfileEmail} setProfilePhoto={setProfilePhoto}/>}
                     {files.length > 0 && (

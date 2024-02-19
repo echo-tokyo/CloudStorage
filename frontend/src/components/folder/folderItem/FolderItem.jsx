@@ -7,7 +7,7 @@ const FolderItem = ({folder, getFolderData, setFolders, setTrashFolders}) => {
         const token = localStorage.getItem('token')
         axios.put('http://79.137.204.172/api/storage/move-folder-to-trash/', {"id": folder.id}, {headers: {"Authorization": `Bearer ${token}`}})
         .then(() => {
-            const newFolder = {id: folder.id, name: folder.name, size: folder.size}
+            const newFolder = {id: folder.id, name: folder.name}
             setTrashFolders(prevFiles => [...prevFiles, newFolder])
         })
         .catch(error => {

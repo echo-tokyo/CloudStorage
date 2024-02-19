@@ -19,8 +19,8 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFiles, f
     const filesPush = (e) => {
         const file = e.target.files[0]
         const formData = new FormData()
-        formData.append('folder_id', activeFolder)
         formData.append('file', file)
+        formData.append('folder_id', activeFolder)
 
         axios.post('http://79.137.204.172/api/storage/upload-file-to-server/', formData, {headers: {'Authorization' : `Bearer ${token}`}})
         .then(response => {
@@ -31,7 +31,6 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFiles, f
             console.error('Произошла ошибка при отправке файла ', error)
         })
     }
-    console.log(activeFolder)
     const createFolder = () => {
         axios.post('http://79.137.204.172/api/storage/create-folder/', {parent: activeFolder, name: 'test'}, {headers: {'Authorization' : `Bearer ${token}`}})
         .then(response => {
