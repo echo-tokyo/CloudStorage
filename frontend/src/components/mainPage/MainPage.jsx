@@ -7,6 +7,7 @@ import Modal from './modal/Modal'
 import Profile from './profile/Profile'
 import axios from 'axios'
 import FolderItem from './folderItem/FolderItem'
+import CreateFolder from './createFolder/CreateFolder'
 
 function MainPage(){
     const token = localStorage.getItem('token')
@@ -112,9 +113,12 @@ function MainPage(){
     const [modal, setModal] = useState(false)
     const [trashFiles, setTrashFiles] = useState([])
     const [trashFolders, setTrashFolders] = useState([])
+
     const modalOpen = () => {
         setModal(!modal)
         setProfile(false)
+        setCreateFolder(false)
+
         axios.post('http://79.137.204.172/api/storage/get-trash/', null, {headers: {"Authorization": `Bearer ${token}`}})
         .then(response => {
             const files = response.data.files.map(file => (
@@ -143,18 +147,32 @@ function MainPage(){
     const profileClick = () => {
         setProfile(!profile)
         setModal(false)
+        setCreateFolder(false)
+    }
+
+    const [createFolder, setCreateFolder] = useState(false)
+    const folderModal = () => {
+        setCreateFolder(!createFolder)
+        setModal(false)
+        setProfile(false)
     }
 
     useEffect(() => { 
         const handleClickOutside = (e) => { 
-            if (e.target.closest('.modal-window') === null && !e.target.classList.contains("modal-opener")) { 
+            if (e.target.closest('.modal-window') === null &&
+                e.target.closest('.modal-profile') === null  &&
+                e.target.closest('.modal-folder') === null  &&
+                !e.target.classList.contains('modal-opener')) { 
                 if (modal) {
                     setModal(false)
                 } 
                 else if (profile) {
                     setProfile(false)
                 }
-            } 
+                else if (createFolder) {
+                    setCreateFolder(false)
+                }
+            }
         } 
 
         document.addEventListener("mousedown", handleClickOutside);
@@ -163,15 +181,17 @@ function MainPage(){
             document.removeEventListener("mousedown", handleClickOutside);
         }
     })
+
     return(
         <Themes defaultTheme={false}>
             {(changeTheme) => (
                 <>
-                <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFiles={setFiles} setFolders={setFolders} folders={folders} activeFolder={activeFolder} formatFileSize={formatFileSize}/>
+                <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFiles={setFiles} setFolders={setFolders} folders={folders} activeFolder={activeFolder} formatFileSize={formatFileSize} folderModal={folderModal}/>
                 <main>
                     {activeFolder !== localStorage.getItem('rootDir') && (
                         <p>Назад</p>
                     )}
+                    {createFolder && <CreateFolder activeFolder={activeFolder} setFolders={setFolders} setCreateFolder={setCreateFolder}/>}
                     {modal && <Modal trashFiles={trashFiles} setTrashFiles={setTrashFiles} setFiles={setFiles} formatFileSize={formatFileSize} trashFolders={trashFolders} setTrashFolders={setTrashFolders} setFolders={setFolders}/>}
                     {profile && <Profile profilePhoto={profilePhoto} profileEmail={profileEmail} setProfileEmail={setProfileEmail} setProfilePhoto={setProfilePhoto}/>}
                     {files.length > 0 && (

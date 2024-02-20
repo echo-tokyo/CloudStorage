@@ -58,6 +58,9 @@ function Themes({ defaultTheme, children }) {
     .modal-profile{
         background-color: ${props => (props.isClicked && '#515151')};
     }
+    .modal-folder{
+        background-color: ${props => (props.isClicked && '#515151')};
+    }
     .modal-form input[type="text"], .modal-form input[type="email"], .modal-form input[type="password"], .modal-form input[type="submit"]{
         background-color: ${props => (props.isClicked && '#757575')};
         color: ${props => (props.isClicked && 'white')};
