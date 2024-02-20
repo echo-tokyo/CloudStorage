@@ -181,7 +181,7 @@ function MainPage(){
             document.removeEventListener("mousedown", handleClickOutside);
         }
     })
-
+    
     return(
         <Themes defaultTheme={false}>
             {(changeTheme) => (
@@ -189,7 +189,7 @@ function MainPage(){
                 <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFiles={setFiles} setFolders={setFolders} folders={folders} activeFolder={activeFolder} formatFileSize={formatFileSize} folderModal={folderModal}/>
                 <main>
                     {activeFolder !== localStorage.getItem('rootDir') && (
-                        <p>Назад</p>
+                        <p style={{display: 'flex', justifyContent:'center', marginBottom: '20px', textDecoration:'underline', fontSize:'16px', cursor:'pointer'}} onClick={() => getFolderData(localStorage.getItem('rootDir'))}>Назад</p>
                     )}
                     {createFolder && <CreateFolder activeFolder={activeFolder} setFolders={setFolders} setCreateFolder={setCreateFolder}/>}
                     {modal && <Modal trashFiles={trashFiles} setTrashFiles={setTrashFiles} setFiles={setFiles} formatFileSize={formatFileSize} trashFolders={trashFolders} setTrashFolders={setTrashFolders} setFolders={setFolders}/>}

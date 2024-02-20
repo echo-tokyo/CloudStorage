@@ -5,13 +5,17 @@ const CreateFolder = ({activeFolder, setFolders, setCreateFolder}) => {
 	const createNewFolder = (e) => {
 		e.preventDefault()
 		setCreateFolder(false)
-		const folderName = e.target.name.value
-
-		axios.post('http://79.137.204.172/api/storage/create-folder/', {parent: activeFolder, name: folderName}, {headers: {'Authorization' : `Bearer ${localStorage.getItem('token')}`}})
-        .then(response => {
-            const newFolder = {id: response.data.id, name: response.data.name}
-            setFolders(prevFolders => [...prevFolders, newFolder])
-        })
+		if(e.target.name.value.length > 0 && e.target.name.value !== '/'){
+			const folderName = e.target.name.value
+	
+			axios.post('http://79.137.204.172/api/storage/create-folder/', {parent: activeFolder, name: folderName}, {headers: {'Authorization' : `Bearer ${localStorage.getItem('token')}`}})
+			.then(response => {
+				const newFolder = {id: response.data.id, name: response.data.name}
+				setFolders(prevFolders => [...prevFolders, newFolder])
+			})
+		} else {
+			alert('Некорректное название папки')
+		}
 	}
 	return (
 		<div className="modal-folder">
