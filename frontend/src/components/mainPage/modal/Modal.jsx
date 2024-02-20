@@ -1,11 +1,18 @@
+import axios from 'axios'
 import './modal.css'
 import ModalFile from './modalFile/ModalFile'
 import ModalFolder from './modalFolder/ModalFolder'
 
 function Modal ({trashFiles, setTrashFiles, setFiles, setTrashFolders, trashFolders, setFolders}) {
     const trashRemove = () => {
-        setTrashFiles('')
-        setTrashFolders('')
+        axios.delete('http://79.137.204.172/api/storage/clear-trash/', {headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
+        .then(() => {
+            setTrashFiles('')
+            setTrashFolders('')
+        })
+        .catch(error => {
+            console.error('Произошла ошибка при удалении ', error)
+        })
     }
     return(
         <div className="modal-window">
