@@ -174,6 +174,28 @@ class GetTrashAPIView(APIView):
         return Response(data=content_data, status=status.HTTP_200_OK)
 
 
+class ClearTrashAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def delete(self, request: Request):
+        # получение юзера из запроса
+        user = request.user
+        if user is None:
+            raise UserValidateError('Cannot parse user from request.')
+
+        # получение всей корзины (отдельно папки, отдельно файлы)
+        files_queryset = File.objects.filter(user=request.user, recycle_bin=1)
+        folders_queryset = Folder.objects.filter(user=request.user, recycle_bin=1)
+
+        try:
+            files_queryset.delete()
+            folders_queryset.delete()
+        except Exception as error:
+            raise error
+
+        return Response(data={'result': 'Recycle bin has been cleared'}, status=status.HTTP_200_OK)
+
+
 class MoveFileToTrashAPIView(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = MoveFileToTrashSerializer
@@ -362,7 +384,7 @@ class DeleteFolderAPIView(APIView):
             raise FolderValueError('Cannot remove root folder!')
 
         try:
-            # удаление файла
+            # удаление папки
             folder_obj.delete()
         except Exception as error:
             raise error
@@ -388,4 +410,3 @@ class RenameFolderAPIView(APIView):
         serializer.save()
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
-

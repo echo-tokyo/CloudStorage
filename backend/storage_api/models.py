@@ -8,6 +8,8 @@ from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
+from .errors import FolderValueError
+
 
 def user_files_dir_path(instance, filename):
     """return path to upload file to MEDIA_ROOT/files/user_<id>/<folder-id>_<datetime>"""
@@ -79,6 +81,14 @@ class Folder(models.Model):
     def str_updated_at(self):
         return str(self.created_at)[:16].replace('T', ' ')
 
+    def delete(self, *args, **kwargs):
+        # ошибка, если запрос на удаление корневой папки
+        if self.name == '/':
+            raise FolderValueError('Cannot delete root folder!')
+
+        # Вызов оригинального метода delete()
+        super(Folder, self).delete(*args, **kwargs)
+
 
 class File(models.Model):
     user = models.ForeignKey(
@@ -129,17 +139,6 @@ class File(models.Model):
     def create_datetime_str(self):
         return str(self.created_at)[:16].replace('T', ' ')
 
-    def delete(self, *args, **kwargs):
-        full_file_path = f'{settings.BASE_DIR}/media/{self.path}'
-
-        try:
-            remove_file(full_file_path)
-        except FileNotFoundError:
-            pass
-
-        # Вызов оригинального метода delete()
-        super(File, self).delete(*args, **kwargs)
-
 
 # Функция для удаления связанных файлов перед удалением папки
 @receiver(pre_delete, sender=Folder)
@@ -156,3 +155,15 @@ def delete_related_files(sender, instance, **kwargs):
 
         # Удаление записи о файле из базы данных
         file.delete()
+
+
+# Функция для удаления физического файла перед удалением его записи из БД
+@receiver(pre_delete, sender=File)
+def delete_related_files(sender, instance, **kwargs):
+    full_file_path = f'{settings.BASE_DIR}/media/{instance.path}'
+
+    try:
+        remove_file(full_file_path)
+    except FileNotFoundError:
+        print('ERROR')
+        pass
