@@ -138,12 +138,31 @@ function MainPage(){
         })
     }
 
+    
     const [profile, setProfile] = useState(false)
     const profileClick = () => {
         setProfile(!profile)
         setModal(false)
     }
 
+    useEffect(() => { 
+        const handleClickOutside = (e) => { 
+            if (e.target.closest('.modal-window') === null && !e.target.classList.contains("modal-opener")) { 
+                if (modal) {
+                    setModal(false)
+                } 
+                else if (profile) {
+                    setProfile(false)
+                }
+            } 
+        } 
+
+        document.addEventListener("mousedown", handleClickOutside);
+        
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+    })
     return(
         <Themes defaultTheme={false}>
             {(changeTheme) => (

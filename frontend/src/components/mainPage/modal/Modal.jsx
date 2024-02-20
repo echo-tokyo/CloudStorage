@@ -14,8 +14,11 @@ function Modal ({trashFiles, setTrashFiles, setFiles, setTrashFolders, trashFold
             console.error('Произошла ошибка при удалении ', error)
         })
     }
+    const handleModalClick = (event) => {
+        event.stopPropagation()
+    }
     return(
-        <div className="modal-window">
+        <div className="modal-window" onClick={event => handleModalClick(event)}>
             <div className="titles">
                 <p>Корзина</p>
                 <p className='subtitle' onClick={()=> trashRemove()}>Очистить</p>
