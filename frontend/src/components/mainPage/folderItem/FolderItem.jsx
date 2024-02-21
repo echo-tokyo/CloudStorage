@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const FolderItem = ({folder, getFolderData, setFolders, setTrashFolders}) => {
+const FolderItem = ({folder, getFolderData, setFolders, setTrashFolders, setIdStorage}) => {
 	const handleRemove = (event) => {
 		event.stopPropagation()
 		setFolders(prev => prev.filter((el) => el.id !== folder.id))
@@ -14,8 +14,12 @@ const FolderItem = ({folder, getFolderData, setFolders, setTrashFolders}) => {
             console.error('Произошла ошибка при удалении файла ', error)
         })
 	}
+	const getFolderData2 = (folderId) => {
+		setIdStorage(prev => [...prev, folderId])
+		getFolderData(folderId)
+	}
 	return (
-		<div className="file-item" style={{cursor:'pointer'}} onClick={() => getFolderData(folder.id)}>
+		<div className="file-item" style={{cursor:'pointer'}} onClick={() => getFolderData2(folder.id)}>
 			<p>{folder.name}</p>
 			<div className="file-item_item">
 				<div className="file-item_item2">

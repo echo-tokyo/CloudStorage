@@ -16,6 +16,7 @@ function MainPage(){
     const [profilePhoto, setProfilePhoto] = useState('')
     const [profileEmail, setProfileEmail] = useState('')
     const [activeFolder, setActiveFolder] = useState(localStorage.getItem('rootDir'))
+    const [idStorage, setIdStorage] = useState([Number(localStorage.getItem('rootDir'))])
     
     const formatFileSize = (sizeInBytes) => {
         let suffix = 'байт';
@@ -55,6 +56,7 @@ function MainPage(){
             .then(response => {
                 localStorage.setItem('rootDir', response.data.root_dir)
                 setActiveFolder(localStorage.getItem('rootDir'))
+                // setIdStorage([localStorage.getItem('roodDir')])
             })
             .catch(error => {
                 console.error('Произошла ошибка при получении root-dir', error)
@@ -68,7 +70,7 @@ function MainPage(){
                         name: file.name,
                         size: formatFileSize(file.size)
                     }
-                ))
+                ))  
                 const folders = response.data.folders.map(folder => (
                     {
                         id: folder.id,
@@ -84,6 +86,14 @@ function MainPage(){
         }
         fetchData()
     }, [])
+    
+    const getFolderData3 = () => { 
+        setIdStorage(prev => {
+            const updatedIdStorage = prev.slice(0, -1)
+            getFolderData(updatedIdStorage[updatedIdStorage.length - 1])
+            return updatedIdStorage
+        })
+    }
 
     const getFolderData = (folderId) => {
         axios.post('http://79.137.204.172/api/storage/get-folder-content/', {folder_id: folderId}, {headers: {'Authorization': `Bearer ${token}`}})
@@ -101,24 +111,25 @@ function MainPage(){
                     name: folder.name,
                 }
             ))
-            setFolders(folders)
-            setFiles(files)
-            setActiveFolder(folderId)
+                setFolders(folders)
+                setFiles(files)
+                setActiveFolder(folderId)
+                console.log('передается и рендерится этот id', folderId)
         })
         .catch(error => {
             console.error('Произошла ошибка при получении данных папки', error)
         })
     }
-    
+        
     const [modal, setModal] = useState(false)
     const [trashFiles, setTrashFiles] = useState([])
     const [trashFolders, setTrashFolders] = useState([])
-
+                
     const modalOpen = () => {
         setModal(!modal)
         setProfile(false)
         setCreateFolder(false)
-
+                        
         axios.post('http://79.137.204.172/api/storage/get-trash/', null, {headers: {"Authorization": `Bearer ${token}`}})
         .then(response => {
             const files = response.data.files.map(file => (
@@ -142,7 +153,6 @@ function MainPage(){
         })
     }
 
-    
     const [profile, setProfile] = useState(false)
     const profileClick = () => {
         setProfile(!profile)
@@ -189,7 +199,7 @@ function MainPage(){
                 <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFiles={setFiles} setFolders={setFolders} folders={folders} activeFolder={activeFolder} formatFileSize={formatFileSize} folderModal={folderModal}/>
                 <main>
                     {activeFolder !== localStorage.getItem('rootDir') && (
-                        <p style={{display: 'flex', justifyContent:'center', marginBottom: '20px', textDecoration:'underline', fontSize:'16px', cursor:'pointer'}} onClick={() => getFolderData(localStorage.getItem('rootDir'))}>Назад</p>
+                        <p style={{display: 'flex', justifyContent:'center', marginBottom: '20px', textDecoration:'underline', fontSize:'16px', cursor:'pointer'}} onClick={() => getFolderData3()}>Назад</p>
                     )}
                     {createFolder && <CreateFolder activeFolder={activeFolder} setFolders={setFolders} setCreateFolder={setCreateFolder}/>}
                     {modal && <Modal trashFiles={trashFiles} setTrashFiles={setTrashFiles} setFiles={setFiles} formatFileSize={formatFileSize} trashFolders={trashFolders} setTrashFolders={setTrashFolders} setFolders={setFolders}/>}
@@ -198,7 +208,7 @@ function MainPage(){
                         files.map(file => <FileItem key={file.id} file={file} setFiles={setFiles} setTrashFiles={setTrashFiles}/>)
                     )}
                     {folders.length > 0 && (
-                        folders.map(folder => <FolderItem key={folder.id} folder={folder} setFolders={setFolders} getFolderData={getFolderData} setTrashFolders={setTrashFolders}/>)
+                        folders.map(folder => <FolderItem key={folder.id} folder={folder} setFolders={setFolders} getFolderData={getFolderData} setTrashFolders={setTrashFolders} setIdStorage={setIdStorage} idStorage={idStorage}/>)
                     )}
                 </main>
                 </>
