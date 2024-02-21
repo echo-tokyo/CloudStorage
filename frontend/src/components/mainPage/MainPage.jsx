@@ -56,7 +56,6 @@ function MainPage(){
             .then(response => {
                 localStorage.setItem('rootDir', response.data.root_dir)
                 setActiveFolder(localStorage.getItem('rootDir'))
-                // setIdStorage([localStorage.getItem('roodDir')])
             })
             .catch(error => {
                 console.error('Произошла ошибка при получении root-dir', error)
@@ -114,7 +113,6 @@ function MainPage(){
                 setFolders(folders)
                 setFiles(files)
                 setActiveFolder(folderId)
-                console.log('передается и рендерится этот id', folderId)
         })
         .catch(error => {
             console.error('Произошла ошибка при получении данных папки', error)
@@ -198,7 +196,7 @@ function MainPage(){
                 <>
                 <Header changeTheme={changeTheme} modalOpen={modalOpen} profileClick={profileClick} profilePhoto={profilePhoto} setFiles={setFiles} setFolders={setFolders} folders={folders} activeFolder={activeFolder} formatFileSize={formatFileSize} folderModal={folderModal}/>
                 <main>
-                    {activeFolder !== localStorage.getItem('rootDir') && (
+                    {activeFolder != Number(localStorage.getItem('rootDir')) && (
                         <p style={{display: 'flex', justifyContent:'center', marginBottom: '20px', textDecoration:'underline', fontSize:'16px', cursor:'pointer'}} onClick={() => getFolderData3()}>Назад</p>
                     )}
                     {createFolder && <CreateFolder activeFolder={activeFolder} setFolders={setFolders} setCreateFolder={setCreateFolder}/>}
