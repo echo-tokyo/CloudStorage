@@ -11,15 +11,15 @@ import CreateFolder from './createFolder/CreateFolder'
 
 function MainPage(){
     const token = localStorage.getItem('token')
-    const [activeFolder, setActiveFolder] = useState(localStorage.getItem('rootDir'))
     const [files, setFiles] = useState([])
     const [folders, setFolders] = useState([])
     const [profilePhoto, setProfilePhoto] = useState('')
     const [profileEmail, setProfileEmail] = useState('')
+    const [activeFolder, setActiveFolder] = useState(localStorage.getItem('rootDir'))
     
     const formatFileSize = (sizeInBytes) => {
         let suffix = 'байт';
-
+        
         switch (true) {
             case sizeInBytes < 1024:
                 suffix = 'байт';
@@ -36,10 +36,9 @@ function MainPage(){
                 sizeInBytes = (sizeInBytes / (1024 * 1024 * 1024)).toFixed(1);
                 suffix = 'ГБ';
         }
-
         return sizeInBytes + ' ' + suffix;
     };
-
+                    
     useEffect( () => {
         const fetchData = async () => {
             await axios.get('http://79.137.204.172/api/user/get-profile-info/', {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}})
@@ -51,15 +50,16 @@ function MainPage(){
                 setProfilePhoto('../../../../public/i.webp')
                 console.error('Произошла ошибка при получении данных профиля ', error)
             })
-    
+            
             await axios.get('http://79.137.204.172/api/storage/get-root-dir/', {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}})
             .then(response => {
                 localStorage.setItem('rootDir', response.data.root_dir)
+                setActiveFolder(localStorage.getItem('rootDir'))
             })
             .catch(error => {
                 console.error('Произошла ошибка при получении root-dir', error)
             })
-    
+            
             await axios.post('http://79.137.204.172/api/storage/get-folder-content/', {folder_id: Number(localStorage.getItem('rootDir'))}, {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}})
             .then(response => {
                 const files = response.data.files.map(file => (
