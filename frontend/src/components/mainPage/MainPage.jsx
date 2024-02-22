@@ -143,13 +143,12 @@ function MainPage(){
         setModal(false)
         setProfile(false)
     }
-
     useEffect(() => { 
         const handleClickOutside = (e) => { 
             if (e.target.closest('.modal-window') === null &&
-                e.target.closest('.modal-profile') === null  &&
-                e.target.closest('.modal-folder') === null  &&
-                !e.target.classList.contains('modal-opener')) { 
+            e.target.closest('.modal-profile') === null  &&
+            e.target.closest('.modal-folder') === null  &&
+            !e.target.classList.contains('modal-opener')) { 
                 if (modal) {
                     setModal(false)
                 } 
@@ -161,14 +160,13 @@ function MainPage(){
                 }
             }
         } 
-
+        
         document.addEventListener("mousedown", handleClickOutside);
         
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         }
     })
-    
     return(
         <Themes defaultTheme={false}>
             {(changeTheme) => (
@@ -185,7 +183,7 @@ function MainPage(){
                         files.map(file => <FileItem key={file.id} file={file} setFiles={setFiles} setTrashFiles={setTrashFiles}/>)
                     )}
                     {folders.length > 0 && (
-                        folders.map(folder => <FolderItem key={folder.id} folder={folder} setFolders={setFolders} getFolderData={getFolderData} setTrashFolders={setTrashFolders} setIdStorage={setIdStorage} idStorage={idStorage}/>)
+                        folders.map(folder => <FolderItem key={folder.id} folder={folder} setFolders={setFolders} getFolderData={getFolderData} setTrashFolders={setTrashFolders} setIdStorage={setIdStorage} idStorage={idStorage} />)
                     )}
                     {files.length < 1 && folders.length < 1 && (
                         <p style={{display: 'flex', justifyContent:'center'}}>There are no files</p>
