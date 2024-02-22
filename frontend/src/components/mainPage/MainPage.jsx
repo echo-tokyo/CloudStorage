@@ -55,7 +55,8 @@ function MainPage(){
             await axios.get('http://79.137.204.172/api/storage/get-root-dir/', {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}})
             .then(response => {
                 localStorage.setItem('rootDir', response.data.root_dir)
-                setActiveFolder(localStorage.getItem('rootDir'))
+                setActiveFolder([response.data.root_dir])
+                setIdStorage([response.data.root_dir])
             })
             .catch(error => {
                 console.error('Произошла ошибка при получении root-dir', error)
@@ -127,28 +128,6 @@ function MainPage(){
         setModal(!modal)
         setProfile(false)
         setCreateFolder(false)
-                        
-        axios.post('http://79.137.204.172/api/storage/get-trash/', null, {headers: {"Authorization": `Bearer ${token}`}})
-        .then(response => {
-            const files = response.data.files.map(file => (
-                {
-                    id: file.id,
-                    name: file.name,
-                    size: formatFileSize(file.size)
-                }
-            ))
-            const folders = response.data.folders.map(folder => (
-                {
-                    id: folder.id,
-                    name: folder.name,
-                }
-            ))
-            setTrashFiles(files)
-            setTrashFolders(folders)
-        })
-        .catch(error => {
-            console.error('Произошла ошибка при получении удаленных файлов ', error)
-        })
     }
 
     const [profile, setProfile] = useState(false)
@@ -164,13 +143,12 @@ function MainPage(){
         setModal(false)
         setProfile(false)
     }
-
     useEffect(() => { 
         const handleClickOutside = (e) => { 
             if (e.target.closest('.modal-window') === null &&
-                e.target.closest('.modal-profile') === null  &&
-                e.target.closest('.modal-folder') === null  &&
-                !e.target.classList.contains('modal-opener')) { 
+            e.target.closest('.modal-profile') === null  &&
+            e.target.closest('.modal-folder') === null  &&
+            !e.target.classList.contains('modal-opener')) { 
                 if (modal) {
                     setModal(false)
                 } 
@@ -182,14 +160,13 @@ function MainPage(){
                 }
             }
         } 
-
+        
         document.addEventListener("mousedown", handleClickOutside);
         
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         }
     })
-    
     return(
         <Themes defaultTheme={false}>
             {(changeTheme) => (
@@ -200,13 +177,16 @@ function MainPage(){
                         <p style={{display: 'flex', justifyContent:'center', marginBottom: '20px', textDecoration:'underline', fontSize:'16px', cursor:'pointer'}} onClick={() => getFolderData3()}>Назад</p>
                     )}
                     {createFolder && <CreateFolder activeFolder={activeFolder} setFolders={setFolders} setCreateFolder={setCreateFolder}/>}
-                    {modal && <Modal trashFiles={trashFiles} setTrashFiles={setTrashFiles} setFiles={setFiles} formatFileSize={formatFileSize} trashFolders={trashFolders} setTrashFolders={setTrashFolders} setFolders={setFolders}/>}
+                    {modal && <Modal trashFiles={trashFiles} setTrashFiles={setTrashFiles} setFiles={setFiles} formatFileSize={formatFileSize} trashFolders={trashFolders} setTrashFolders={setTrashFolders} setFolders={setFolders} />}
                     {profile && <Profile profilePhoto={profilePhoto} profileEmail={profileEmail} setProfileEmail={setProfileEmail} setProfilePhoto={setProfilePhoto}/>}
                     {files.length > 0 && (
                         files.map(file => <FileItem key={file.id} file={file} setFiles={setFiles} setTrashFiles={setTrashFiles}/>)
                     )}
                     {folders.length > 0 && (
-                        folders.map(folder => <FolderItem key={folder.id} folder={folder} setFolders={setFolders} getFolderData={getFolderData} setTrashFolders={setTrashFolders} setIdStorage={setIdStorage} idStorage={idStorage}/>)
+                        folders.map(folder => <FolderItem key={folder.id} folder={folder} setFolders={setFolders} getFolderData={getFolderData} setTrashFolders={setTrashFolders} setIdStorage={setIdStorage} idStorage={idStorage} />)
+                    )}
+                    {files.length < 1 && folders.length < 1 && (
+                        <p style={{display: 'flex', justifyContent:'center'}}>There are no files</p>
                     )}
                 </main>
                 </>
