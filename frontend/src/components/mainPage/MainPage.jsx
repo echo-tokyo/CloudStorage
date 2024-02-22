@@ -55,7 +55,8 @@ function MainPage(){
             await axios.get('http://79.137.204.172/api/storage/get-root-dir/', {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}})
             .then(response => {
                 localStorage.setItem('rootDir', response.data.root_dir)
-                setActiveFolder(localStorage.getItem('rootDir'))
+                setActiveFolder([response.data.root_dir])
+                setIdStorage([response.data.root_dir])
             })
             .catch(error => {
                 console.error('Произошла ошибка при получении root-dir', error)
@@ -117,6 +118,7 @@ function MainPage(){
         .catch(error => {
             console.error('Произошла ошибка при получении данных папки', error)
         })
+        console.log(folderId)
     }
         
     const [modal, setModal] = useState(false)
