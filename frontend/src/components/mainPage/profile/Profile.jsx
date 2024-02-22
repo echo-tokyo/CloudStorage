@@ -9,14 +9,14 @@ function Profile ({profilePhoto, profileEmail, setProfileEmail, setProfilePhoto}
 
     const sendProfileData = (e) => {
         e.preventDefault()
-        setProfileEmail(e.target.email.value)
         const token = localStorage.getItem('token')
         const profileData = {
             email: e.target.email.value,
         }
         
         axios.put('http://79.137.204.172/api/user/edit-email/', profileData, {headers:{'Content-Type': 'application/json', "Authorization": `Bearer ${token}`}})
-        .then(() => {
+        .then((response) => {
+            setProfileEmail(response.data.email)
             document.querySelector('.send').style = `border: 2px solid lightgreen`
         })
         .catch((error) => {

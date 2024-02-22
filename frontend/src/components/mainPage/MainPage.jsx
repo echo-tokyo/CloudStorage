@@ -187,6 +187,9 @@ function MainPage(){
                     {folders.length > 0 && (
                         folders.map(folder => <FolderItem key={folder.id} folder={folder} setFolders={setFolders} getFolderData={getFolderData} setTrashFolders={setTrashFolders} setIdStorage={setIdStorage} idStorage={idStorage}/>)
                     )}
+                    {files.length < 1 && folders.length < 1 && (
+                        <p style={{display: 'flex', justifyContent:'center'}}>There are no files</p>
+                    )}
                 </main>
                 </>
             )}

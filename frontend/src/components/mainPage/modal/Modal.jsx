@@ -56,6 +56,9 @@ function Modal ({trashFiles, setTrashFiles, setFiles, setTrashFolders, trashFold
                 {trashFolders.length > 0 && (
                     trashFolders.map(folder => <ModalFolder key={folder.id} folder={folder} setTrashFolders={setTrashFolders} setFolders={setFolders} trashFolders={trashFolders}/>)
                 )}
+                {trashFolders.length < 1 && trashFiles.length < 1 && (
+                    <p style={{display: 'flex', justifyContent:'center'}}>There are no files</p>
+                )}
             </div>
         </div>
     )
