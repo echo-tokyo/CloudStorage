@@ -2,8 +2,9 @@ import axios from 'axios'
 import './modal.css'
 import ModalFile from './modalFile/ModalFile'
 import ModalFolder from './modalFolder/ModalFolder'
+import { useEffect } from 'react'
 
-function Modal ({trashFiles, setTrashFiles, setFiles, setTrashFolders, trashFolders, setFolders}) {
+function Modal ({trashFiles, setTrashFiles, setFiles, setTrashFolders, trashFolders, setFolders, formatFileSize}) {
     const trashRemove = () => {
         axios.delete('http://79.137.204.172/api/storage/clear-trash/', {headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
         .then(() => {
@@ -17,6 +18,31 @@ function Modal ({trashFiles, setTrashFiles, setFiles, setTrashFolders, trashFold
     const handleModalClick = (event) => {
         event.stopPropagation()
     }
+
+    useEffect(() => {
+        axios.post('http://79.137.204.172/api/storage/get-trash/', null, {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}})
+        .then(response => {
+            const files = response.data.files.map(file => (
+                {
+                    id: file.id,
+                    name: file.name,
+                    size: formatFileSize(file.size)
+                }
+            ))
+            const folders = response.data.folders.map(folder => (
+                {
+                    id: folder.id,
+                    name: folder.name,
+                }
+            ))
+            setTrashFiles(files)
+            setTrashFolders(folders)
+        })
+        .catch(error => {
+            console.error('Произошла ошибка при получении удаленных файлов ', error)
+        })
+    }, [])
+
     return(
         <div className="modal-window" onClick={event => handleModalClick(event)}>
             <div className="titles">

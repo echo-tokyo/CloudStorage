@@ -118,7 +118,6 @@ function MainPage(){
         .catch(error => {
             console.error('Произошла ошибка при получении данных папки', error)
         })
-        console.log(folderId)
     }
         
     const [modal, setModal] = useState(false)
@@ -129,28 +128,6 @@ function MainPage(){
         setModal(!modal)
         setProfile(false)
         setCreateFolder(false)
-                        
-        axios.post('http://79.137.204.172/api/storage/get-trash/', null, {headers: {"Authorization": `Bearer ${token}`}})
-        .then(response => {
-            const files = response.data.files.map(file => (
-                {
-                    id: file.id,
-                    name: file.name,
-                    size: formatFileSize(file.size)
-                }
-            ))
-            const folders = response.data.folders.map(folder => (
-                {
-                    id: folder.id,
-                    name: folder.name,
-                }
-            ))
-            setTrashFiles(files)
-            setTrashFolders(folders)
-        })
-        .catch(error => {
-            console.error('Произошла ошибка при получении удаленных файлов ', error)
-        })
     }
 
     const [profile, setProfile] = useState(false)
@@ -202,7 +179,7 @@ function MainPage(){
                         <p style={{display: 'flex', justifyContent:'center', marginBottom: '20px', textDecoration:'underline', fontSize:'16px', cursor:'pointer'}} onClick={() => getFolderData3()}>Назад</p>
                     )}
                     {createFolder && <CreateFolder activeFolder={activeFolder} setFolders={setFolders} setCreateFolder={setCreateFolder}/>}
-                    {modal && <Modal trashFiles={trashFiles} setTrashFiles={setTrashFiles} setFiles={setFiles} formatFileSize={formatFileSize} trashFolders={trashFolders} setTrashFolders={setTrashFolders} setFolders={setFolders}/>}
+                    {modal && <Modal trashFiles={trashFiles} setTrashFiles={setTrashFiles} setFiles={setFiles} formatFileSize={formatFileSize} trashFolders={trashFolders} setTrashFolders={setTrashFolders} setFolders={setFolders} />}
                     {profile && <Profile profilePhoto={profilePhoto} profileEmail={profileEmail} setProfileEmail={setProfileEmail} setProfilePhoto={setProfilePhoto}/>}
                     {files.length > 0 && (
                         files.map(file => <FileItem key={file.id} file={file} setFiles={setFiles} setTrashFiles={setTrashFiles}/>)
