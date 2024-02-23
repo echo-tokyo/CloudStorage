@@ -57,6 +57,6 @@
     input[type="email"],[type="password"],[type="text"], [type="submit"]{
         width: 280px;
         text-align: center;
-        text-indent: 0;
+        text-indent: 0px;
     }
 }

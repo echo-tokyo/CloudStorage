@@ -8,9 +8,10 @@
 	outline: none;
 	color: white;
 }
-@media (max-width: 485px) {
+@media (max-width: 490px) {
 	input.folderRename{
 		width: 150px ;
 		font-size: 16px;
+		text-align: left;
 	}	
 }
