@@ -6,7 +6,7 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFiles, f
     const token = localStorage.getItem('token')
     const navigate = useNavigate()
     const logoutClick = () => {
-        axios.post('http://79.137.204.172/api/user/logout/', token, {headers: {'Authorization': `Bearer ${token}`}})
+        axios.post('https://79.137.204.172/api/user/logout/', token, {headers: {'Authorization': `Bearer ${token}`}})
         .catch(error => {
             console.error('Произошла ошибка при выходе ', error)
         })
@@ -21,7 +21,7 @@ function Header({changeTheme, modalOpen, profileClick, profilePhoto, setFiles, f
         formData.append('file', file)
         formData.append('folder_id', activeFolder)
 
-        axios.post('http://79.137.204.172/api/storage/upload-file-to-server/', formData, {headers: {'Authorization' : `Bearer ${token}`}})
+        axios.post('https://79.137.204.172/api/storage/upload-file-to-server/', formData, {headers: {'Authorization' : `Bearer ${token}`}})
         .then(response => {
             const newFile = {id: response.data.id, name: response.data.name, size: formatFileSize(response.data.size)}
             setFiles(prevFiles => [...prevFiles, newFile])

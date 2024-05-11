@@ -15,7 +15,7 @@ function Reg () {
             password: e.target.password.value
         }
 
-        axios.post('http://79.137.204.172/api/user/reg/', formData, {headers: {'Content-Type': 'application/json'}})
+        axios.post('https://79.137.204.172/api/user/reg/', formData, {headers: {'Content-Type': 'application/json'}})
         .then(response => {
             localStorage.setItem('token', response.data.token)
             navigate('/')

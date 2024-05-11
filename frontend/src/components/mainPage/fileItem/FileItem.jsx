@@ -5,7 +5,7 @@ function FileItem({file, setFiles, setTrashFiles}) {
     const handleRemove = () => {
         setFiles(prev => prev.filter((el) => el.id !== file.id))
         const token = localStorage.getItem('token')
-        axios.put('http://79.137.204.172/api/storage/move-file-to-trash/', {"id": file.id}, {headers: {"Authorization": `Bearer ${token}`}})
+        axios.put('https://79.137.204.172/api/storage/move-file-to-trash/', {"id": file.id}, {headers: {"Authorization": `Bearer ${token}`}})
         .then(() => {
             const newFile = {id: file.id, name: file.name, size: file.size}
             setTrashFiles(prevFiles => [...prevFiles, newFile])
@@ -16,7 +16,7 @@ function FileItem({file, setFiles, setTrashFiles}) {
     }
     const fileDownload = () => {
         const token = localStorage.getItem('token')
-        axios.post('http://79.137.204.172/api/storage/download-file-from-server/', {"id": file.id}, {responseType: 'blob', headers: {'Authorization' : `Bearer ${token}`}})
+        axios.post('https://79.137.204.172/api/storage/download-file-from-server/', {"id": file.id}, {responseType: 'blob', headers: {'Authorization' : `Bearer ${token}`}})
         .then(response => {
             const url = URL.createObjectURL((new Blob([response.data])))
             const link = document.createElement('a')

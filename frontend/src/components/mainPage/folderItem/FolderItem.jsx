@@ -8,7 +8,7 @@ const FolderItem = ({folder, getFolderData, setFolders, setTrashFolders, setIdSt
 		event.stopPropagation()
 		setFolders(prev => prev.filter((el) => el.id !== folder.id))
         const token = localStorage.getItem('token')
-        axios.put('http://79.137.204.172/api/storage/move-folder-to-trash/', {"id": folder.id}, {headers: {"Authorization": `Bearer ${token}`}})
+        axios.put('https://79.137.204.172/api/storage/move-folder-to-trash/', {"id": folder.id}, {headers: {"Authorization": `Bearer ${token}`}})
         .then(() => {
             const newFolder = {id: folder.id, name: folder.name}
             setTrashFolders(prevFolders => [...prevFolders, newFolder])
@@ -33,7 +33,7 @@ const FolderItem = ({folder, getFolderData, setFolders, setTrashFolders, setIdSt
 		e.stopPropagation()
 		setIsFolderRenaming(false)
 		if(newName.length > 0 && newName !== '/'){
-			axios.put('http://79.137.204.172/api/storage/rename-folder/', {id: folder.id, name: newName}, {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}})
+			axios.put('https://79.137.204.172/api/storage/rename-folder/', {id: folder.id, name: newName}, {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}})
 			.then(response => {
 				setFolders(prev => {
 					const thisFolder = prev.find(el => el.id === folder.id)

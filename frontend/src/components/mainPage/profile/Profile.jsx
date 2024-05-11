@@ -14,7 +14,7 @@ function Profile ({profilePhoto, profileEmail, setProfileEmail, setProfilePhoto}
             email: e.target.email.value,
         }
         
-        axios.put('http://79.137.204.172/api/user/edit-email/', profileData, {headers:{'Content-Type': 'application/json', "Authorization": `Bearer ${token}`}})
+        axios.put('https://79.137.204.172/api/user/edit-email/', profileData, {headers:{'Content-Type': 'application/json', "Authorization": `Bearer ${token}`}})
         .then((response) => {
             setProfileEmail(response.data.email)
             document.querySelector('.send').style = `border: 2px solid lightgreen`
@@ -34,7 +34,7 @@ function Profile ({profilePhoto, profileEmail, setProfileEmail, setProfilePhoto}
             new_password: e.target.newPassword.value
         }
 
-        axios.put('http://79.137.204.172/api/user/change-password/', newPasswrodData, {headers:{'Content-Type': 'application/json', "Authorization": `Bearer ${token}`}})
+        axios.put('https://79.137.204.172/api/user/change-password/', newPasswrodData, {headers:{'Content-Type': 'application/json', "Authorization": `Bearer ${token}`}})
         .then(() => {
             document.querySelector('.send').style = `border: 2px solid lightgreen`
         })
@@ -49,7 +49,7 @@ function Profile ({profilePhoto, profileEmail, setProfileEmail, setProfilePhoto}
         const file = e.target.files[0]
         const formData = new FormData()
         formData.append('photo', file)
-        axios.put('http://79.137.204.172/api/user/edit-profile-photo/', formData, {headers: {'Authorization': `Bearer ${token}`}})
+        axios.put('https://79.137.204.172/api/user/edit-profile-photo/', formData, {headers: {'Authorization': `Bearer ${token}`}})
         .then(response => {
             setProfilePhoto(response.data.photo_url)
         })

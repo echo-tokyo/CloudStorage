@@ -3,7 +3,7 @@ import axios from 'axios'
 function ModalFile({file, setTrashFiles, setFiles}) {
     const token = localStorage.getItem('token')
     const fileRemove = () => {
-        axios.delete('http://79.137.204.172/api/storage/delete-file/', {
+        axios.delete('https://79.137.204.172/api/storage/delete-file/', {
             data: {id: file.id},
             headers: {"Authorization": `Bearer ${token}`}
         })
@@ -16,7 +16,7 @@ function ModalFile({file, setTrashFiles, setFiles}) {
     }
 
     const restoreFile = () => {
-        axios.put('http://79.137.204.172/api/storage/move-file-from-trash/', {"id": file.id}, {headers: {"Authorization": `Bearer ${token}`}})
+        axios.put('https://79.137.204.172/api/storage/move-file-from-trash/', {"id": file.id}, {headers: {"Authorization": `Bearer ${token}`}})
         .then(() => {
             setTrashFiles(prev => prev.filter((el) => el.id !== file.id))
             const newFile = {id: file.id, name: file.name, size: file.size}

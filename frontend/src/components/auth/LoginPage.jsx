@@ -15,10 +15,11 @@ function Login () {
             password: e.target.password.value
         }
 
-        axios.post('http://79.137.204.172/api/user/login/', formData, {headers:{'Content-Type': 'application/json'}})
+        axios.post('https://79.137.204.172/api/user/login/', formData, {headers:{'Content-Type': 'application/json'}})
         .then(response => {
             localStorage.setItem('token', response.data.token)
             navigate('/')
+            console.log(response.data)
         })
         .catch(error => {
             console.error('Произошла ошибка при входе ', error.response.data)

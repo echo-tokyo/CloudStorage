@@ -5,7 +5,7 @@ function ModalFolder({folder, setFolders, setTrashFolders}) {
     const token = localStorage.getItem('token')
     const folderRemove = () => {
         setTrashFolders(prev => prev.filter((el) => el.id !== folder.id))
-        axios.delete('http://79.137.204.172/api/storage/delete-folder/', {
+        axios.delete('https://79.137.204.172/api/storage/delete-folder/', {
             data: {id: folder.id},
             headers: {"Authorization": `Bearer ${token}`}
         })
@@ -15,7 +15,7 @@ function ModalFolder({folder, setFolders, setTrashFolders}) {
     }
     
     const restoreFolder = () => {
-        axios.put('http://79.137.204.172/api/storage/move-folder-from-trash/', {"id": folder.id}, {headers: {"Authorization": `Bearer ${token}`}})
+        axios.put('https://79.137.204.172/api/storage/move-folder-from-trash/', {"id": folder.id}, {headers: {"Authorization": `Bearer ${token}`}})
         .then(() => {
             setTrashFolders(prev => prev.filter((el) => el.id !== folder.id))
             const newFolder = {id: folder.id, name: folder.name}

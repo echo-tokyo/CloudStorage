@@ -42,7 +42,7 @@ function MainPage(){
                     
     useEffect( () => {
         const fetchData = async () => {
-            await axios.get('http://79.137.204.172/api/user/get-profile-info/', {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}})
+            await axios.get('https://79.137.204.172/api/user/get-profile-info/', {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}})
             .then(response => {
                 setProfilePhoto(response.data.photo_url)
                 setProfileEmail(response.data.email)
@@ -52,7 +52,7 @@ function MainPage(){
                 console.error('Произошла ошибка при получении данных профиля ', error)
             })
             
-            await axios.get('http://79.137.204.172/api/storage/get-root-dir/', {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}})
+            await axios.get('https://79.137.204.172/api/storage/get-root-dir/', {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}})
             .then(response => {
                 localStorage.setItem('rootDir', response.data.root_dir)
                 setActiveFolder([response.data.root_dir])
@@ -62,7 +62,7 @@ function MainPage(){
                 console.error('Произошла ошибка при получении root-dir', error)
             })
             
-            await axios.post('http://79.137.204.172/api/storage/get-folder-content/', {folder_id: Number(localStorage.getItem('rootDir'))}, {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}})
+            await axios.post('https://79.137.204.172/api/storage/get-folder-content/', {folder_id: Number(localStorage.getItem('rootDir'))}, {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}})
             .then(response => {
                 const files = response.data.files.map(file => (
                     {
@@ -96,7 +96,7 @@ function MainPage(){
     }
 
     const getFolderData = (folderId) => {
-        axios.post('http://79.137.204.172/api/storage/get-folder-content/', {folder_id: folderId}, {headers: {'Authorization': `Bearer ${token}`}})
+        axios.post('https://79.137.204.172/api/storage/get-folder-content/', {folder_id: folderId}, {headers: {'Authorization': `Bearer ${token}`}})
         .then(response => {
             const files = response.data.files.map(file => (
                 {
