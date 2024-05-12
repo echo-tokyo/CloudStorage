@@ -22,7 +22,7 @@ function Login () {
             console.log(response.data)
         })
         .catch(error => {
-            console.error('Произошла ошибка при входе ', error.response.data)
+            console.error('Произошла ошибка при входе ', error)
             setDataCorrect(false)
         })
     }

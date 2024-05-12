@@ -48,7 +48,7 @@ function MainPage(){
                 setProfileEmail(response.data.email)
             })
             .catch((error) => {
-                setProfilePhoto('../../../../public/i.webp')
+                setProfilePhoto('../../public/i.webp')
                 console.error('Произошла ошибка при получении данных профиля ', error)
             })
             

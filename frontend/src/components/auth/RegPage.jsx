@@ -14,6 +14,7 @@ function Reg () {
             email: e.target.email.value,
             password: e.target.password.value
         }
+        console.log(formData)
 
         axios.post('https://79.137.204.172/api/user/reg/', formData, {headers: {'Content-Type': 'application/json'}})
         .then(response => {
@@ -21,7 +22,7 @@ function Reg () {
             navigate('/')
         })
         .catch(error => {
-            console.error('Произошла ошибка при регистрации, ', error.response.data)
+            console.error('Произошла ошибка при регистрации, ', error)
             setDataCorrect(false)
         })
     }
