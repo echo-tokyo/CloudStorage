@@ -15,7 +15,7 @@ function Login () {
             password: e.target.password.value
         }
 
-        axios.post('https://79.137.204.172/api/user/login/', formData, {headers:{'Content-Type': 'application/json'}})
+        axios.post('https://best-edu-server.ru/api/user/login/', formData, {headers:{'Content-Type': 'application/json'}})
         .then(response => {
             localStorage.setItem('token', response.data.token)
             navigate('/')

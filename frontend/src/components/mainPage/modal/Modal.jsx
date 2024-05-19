@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 
 function Modal ({trashFiles, setTrashFiles, setFiles, setTrashFolders, trashFolders, setFolders, formatFileSize}) {
     const trashRemove = () => {
-        axios.delete('https://79.137.204.172/api/storage/clear-trash/', {headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
+        axios.delete('https://best-edu-server.ru/api/storage/clear-trash/', {headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
         .then(() => {
             setTrashFiles('')
             setTrashFolders('')
@@ -20,7 +20,7 @@ function Modal ({trashFiles, setTrashFiles, setFiles, setTrashFolders, trashFold
     }
 
     useEffect(() => {
-        axios.post('https://79.137.204.172/api/storage/get-trash/', null, {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}})
+        axios.post('https://best-edu-server.ru/api/storage/get-trash/', null, {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}})
         .then(response => {
             const files = response.data.files.map(file => (
                 {

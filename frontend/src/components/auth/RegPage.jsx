@@ -16,7 +16,7 @@ function Reg () {
         }
         console.log(formData)
 
-        axios.post('https://79.137.204.172/api/user/reg/', formData, {headers: {'Content-Type': 'application/json'}})
+        axios.post('https://best-edu-server.ru/api/user/reg/', formData, {headers: {'Content-Type': 'application/json'}})
         .then(response => {
             localStorage.setItem('token', response.data.token)
             navigate('/')

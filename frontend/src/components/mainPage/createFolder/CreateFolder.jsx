@@ -8,7 +8,7 @@ const CreateFolder = ({activeFolder, setFolders, setCreateFolder}) => {
 		if(e.target.name.value.length > 0 && e.target.name.value !== '/'){
 			const folderName = e.target.name.value
 			
-			axios.post('https://79.137.204.172/api/storage/create-folder/', {parent: Number(activeFolder), name: folderName}, {headers: {'Authorization' : `Bearer ${localStorage.getItem('token')}`}})
+			axios.post('https://best-edu-server.ru/api/storage/create-folder/', {parent: Number(activeFolder), name: folderName}, {headers: {'Authorization' : `Bearer ${localStorage.getItem('token')}`}})
 			.then(response => {
 				const newFolder = {id: response.data.id, name: response.data.name}
 				setFolders(prevFolders => [...prevFolders, newFolder])
