@@ -91,7 +91,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-IP_OR_DNS_SERVER = os.getenv('IP_OR_DNS_SERVER')
+# IP_OR_DNS_SERVER = os.getenv('IP_OR_DNS_SERVER')
+HOST = os.getenv('HOST')
 
 
 # MySQL DB

@@ -164,7 +164,7 @@ class Profile(models.Model):
     @property
     def photo_url(self):
         if self.photo and hasattr(self.photo, 'url'):
-            return f'http://{settings.IP_OR_DNS_SERVER}{self.photo.url}'
+            return f'{settings.HOST}{self.photo.url}'
 
     def save(self, *args, **kwargs):
         # # устанавливаем дефолтный ник, если он не задан
